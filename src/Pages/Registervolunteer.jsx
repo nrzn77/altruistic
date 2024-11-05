@@ -28,11 +28,11 @@ const RegisterVolunteer = () => {
 
       // Upload the volunteer's photo to Firebase Storage
       let photoURL = '';
-      if (photo) {
-        const photoRef = ref(storage, `volunteer_photos/${user.uid}_${Date.now()}`);
-        const snapshot = await uploadBytes(photoRef, photo);
-        photoURL = await getDownloadURL(snapshot.ref); // Get URL of uploaded image
-      }
+      // if (photo) {
+      //   const photoRef = ref(storage, `volunteer_photos/${user.uid}_${Date.now()}`);
+      //   const snapshot = await uploadBytes(photoRef, photo);
+      //   photoURL = await getDownloadURL(snapshot.ref); // Get URL of uploaded image
+      // }
 
       // Save volunteer data in Firestore using the user.uid as the document ID
       await setDoc(doc(db, 'volunteers', user.uid), {
