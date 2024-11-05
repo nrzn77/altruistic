@@ -1,5 +1,6 @@
 // src/Pages/RegisterVolunteer.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
 import { auth, db, storage } from '../firebase-config'; // Firestore, Auth, Storage imports
 import { createUserWithEmailAndPassword } from 'firebase/auth'; // Firebase Auth method
 import { collection, doc, setDoc } from 'firebase/firestore'; // Firestore methods
@@ -28,11 +29,27 @@ const RegisterVolunteer = () => {
 
       // Upload the volunteer's photo to Firebase Storage
       let photoURL = '';
-      // if (photo) {
-      //   const photoRef = ref(storage, `volunteer_photos/${user.uid}_${Date.now()}`);
-      //   const snapshot = await uploadBytes(photoRef, photo);
-      //   photoURL = await getDownloadURL(snapshot.ref); // Get URL of uploaded image
-      // }
+      if (photo) {
+
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('image', photo);
+
+        try {
+          // Make the POST request to the server
+          const response = await axios.post('http://localhost:3000/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+
+          console.log('Server response:', response.data);
+          photoURL = response.data.url;
+        } catch (error) {
+          console.error('Error uploading the image:', error);
+        }
+
+      }
 
       // Save volunteer data in Firestore using the user.uid as the document ID
       await setDoc(doc(db, 'volunteers', user.uid), {
