@@ -6,7 +6,7 @@ import RegisterVolunteer from './Pages/Registervolunteer'; // Import your regist
 import Dashboard from './Pages/Dashboard'; // Import your dashboard page
 import RegisterNGO from './Pages/RegisterNGO';
 import NGOPost from './Pages/CreatePostN';
-
+import DonationPosts from './Pages/DonationPosts';
 
 import { onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth function
 import { auth } from './firebase-config'; // Import your Firebase configuration
@@ -41,6 +41,10 @@ function App() {
           <Link to="/registerNGO">
             <button>Register as a NGO</button>
           </Link>
+          <Link to="/donation-posts">
+            <button>View Donation Posts</button>
+          </Link>
+
         </nav>
 
         {/* Routes */}
@@ -55,6 +59,7 @@ function App() {
          
           <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/CreatePost" element={user ? <NGOPost /> : <Navigate to="/registerNGO" />} />
+          <Route path="/donation-posts" element={<DonationPosts />} />
         </Routes>
       </div>
     </Router>

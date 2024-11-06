@@ -5,7 +5,7 @@ import { collection, addDoc } from 'firebase/firestore';
 
 const RegisterNGO = () => {
   const [formData, setFormData] = useState({
-    ngoID: '',
+    
     name: '',
     aboutUs: '',
     licenseNo: '',
@@ -66,7 +66,7 @@ const RegisterNGO = () => {
 
       
       await addDoc(collection(db, 'NGOs'), {
-        ngoID: formData.ngoID,
+        
         name: formData.name,
         aboutUs: formData.aboutUs,
         licenseNo: formData.licenseNo,
@@ -97,8 +97,7 @@ const RegisterNGO = () => {
     <form onSubmit={handleSubmit}>
       <h2>Register Your NGO</h2>
 
-      <label>NGO ID:</label>
-      <input type="text" name="ngoID" value={formData.ngoID} onChange={handleInputChange} required />
+     
 
       <label>Name:</label>
       <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
