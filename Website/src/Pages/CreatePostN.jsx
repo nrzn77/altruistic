@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { db } from '../firebase-config'; 
+import React, { useState, useEffect } from 'react';
+import { db, auth } from '../firebase-config';  
 import { collection, addDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth'; 
 
 const NGOPost = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,21 @@ const NGOPost = () => {
   });
 
   const [message, setMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);  
+
+  useEffect(() => {
+    
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user); 
+      } else {
+        setCurrentUser(null); 
+      }
+    });
+
+    
+    return () => unsubscribe();
+  }, []);
 
   
   const handleInputChange = (e) => {
@@ -25,14 +41,21 @@ const NGOPost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!currentUser) {
+      setMessage('You need to be logged in to create a post.');
+      return;
+    }
+
     if (formData.title && formData.description && formData.cause && formData.targetedAmount) {
       try {
-       
+        //console.log(currentUser)
         await addDoc(collection(db, 'NGO_Posts'), {
           ...formData,
           targetedAmount: Number(formData.targetedAmount), 
           reachedAmount: 0, 
           createdAt: new Date(),
+          createdBy: currentUser.uid, 
+          ngoEmail: currentUser.email, 
         });
         setMessage('Post created successfully!');
         setFormData({ title: '', description: '', cause: '', targetedAmount: '' }); 
@@ -75,7 +98,7 @@ const NGOPost = () => {
           />
         </div>
 
-        {/* it's Dropdown */}
+        {}
         <div>
           <label>Cause</label>
           <select

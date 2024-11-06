@@ -29,8 +29,9 @@ export default function Canvas() {
     };
 
     const updateMouse = (e) => {
-        mousePosition.current.x = e.nativeEvent.offsetX;
-        mousePosition.current.y = e.nativeEvent.offsetY;
+        mousePosition.current.x = e.clientX;
+        mousePosition.current.y = e.clientY + window.scrollY;
+        // console.log(window.scrollY)
     };
     const drawImage = (ctx, img, reverse = false) => {
 
@@ -64,12 +65,13 @@ export default function Canvas() {
     }, [])
     useEffect(() => {
         const canvas = canvasReference.current;
-        const resize =()=>{
+        const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         resize();
         window.addEventListener("resize", resize);
+        window.addEventListener("mousemove", updateMouse);
 
         const ctx = canvas.getContext("2d");
         contextReference.current = ctx;
@@ -130,6 +132,8 @@ export default function Canvas() {
         return () => {
             window.cancelAnimationFrame(anim_id);
             window.removeEventListener("resize", resize);
+            window.removeEventListener("mousemove", updateMouse);
+
         }
 
     }, [images]);
@@ -138,7 +142,6 @@ export default function Canvas() {
     return (
         <canvas
             ref={canvasReference}
-            onMouseMove={updateMouse}
         />
 
     );
