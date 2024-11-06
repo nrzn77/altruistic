@@ -6,7 +6,7 @@ import RegisterVolunteer from './Pages/Registervolunteer'; // Import your regist
 import Dashboard from './Pages/Dashboard'; // Import your dashboard page
 import RegisterNGO from './Pages/RegisterNGO';
 import NGOPost from './Pages/CreatePostN';
-
+import LandingPage from './Pages/LandingPage';
 
 import { onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth function
 import { auth } from './firebase-config'; // Import your Firebase configuration
@@ -26,28 +26,12 @@ function App() {
   return (
     <Router>
       <div className="home-container">
-        <h1>Welcome to Our App</h1>
-        
-
-        {/* Navigation Links */}
-        <nav>
-          <Link to="/login">
-            <button>Login</button>
-          </Link>
-          <Link to="/register">
-            <button>Create Account</button> 
-          </Link>
-          
-          <Link to="/registerNGO">
-            <button>Register as a NGO</button>
-          </Link>
-        </nav>
-
         {/* Routes */}
         <Routes>
+
+          <Route path="/" element={<LandingPage />} />
          
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          
           
           <Route path="/register" element={!user ? <RegisterVolunteer /> : <Navigate to="/dashboard" />} />
           
