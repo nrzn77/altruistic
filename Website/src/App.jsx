@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
-
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { TopBar } from './Components/TopBar';
 import Login from './Pages/Login'; // Import your login page
 import RegisterVolunteer from './Pages/Registervolunteer'; // Import your registration page
 import Dashboard from './Pages/Dashboard'; // Import your dashboard page
@@ -15,7 +15,6 @@ import { auth } from './firebase-config'; // Import your Firebase configuration
 
 function App() {
   const [user, setUser] = useState(null);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -26,6 +25,7 @@ function App() {
 
   return (
     <Router>
+      <TopBar />
       <div className="home-container">
         {/* Routes */}
         <Routes>

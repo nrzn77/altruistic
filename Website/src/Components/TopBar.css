@@ -1,0 +1,134 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--blue);
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+nav h1 {
+  margin: 0;
+  color: aliceblue;
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger svg{
+  width: 32px;
+  height: 32px;
+}
+
+.search-button {
+  background-color: var(--purple);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, width 0.3s;
+}
+
+/* .search-button.active {
+  background-color: var(--pink);
+} */
+
+.search-input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  width: 200px;
+  transition: width 0.3s;
+}
+
+@media (max-width: 850px) {
+  .menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background-color: var(--blue);
+    padding: 10px 0;
+    height: 100vh;
+  }
+
+  .menu a{
+    width: 100%;
+    text-align: center;
+  }
+
+  .menu.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .dropdown-menu {
+    display: none;
+    background-color: transparent;
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    background-color: #444;
+    margin: 5px 0;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+  }
+
+  .dropdown-menu a {
+    border: 1px solid transparent;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid #fff;
+  }
+
+  .search-input {
+    width: 150px;
+  }
+}
+
+body {
+  padding-top: 80px;
+}
