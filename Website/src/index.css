@@ -101,6 +101,18 @@ section button:hover{
   background-color: var(--purple);
 }
 
+.hidden{
+  filter: blur(5px);
+  transform: translate(0, 20px);
+  opacity: 0;
+  transition: 1s;
+}
+.show{
+  filter: blur(0px);
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
