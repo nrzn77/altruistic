@@ -112,6 +112,7 @@ const NGOPost = () => {
             <option value="Medical Treatment">Medical Treatment</option>
             <option value="Education">Education</option>
             <option value="Social Welfare">Social Welfare</option>
+            <option value="Animal Rescue">Animal Rescue</option>
             {/*add more causes here */}
           </select>
         </div>

@@ -15,7 +15,7 @@ export default function LandingPage() {
     <section>
       <nav>
         <Link to="/login">
-          <button>Login</button>
+          <button>Login as a NGO</button>
         </Link>
         <Link to="/register">
           <button>Create Account</button>
@@ -26,6 +26,9 @@ export default function LandingPage() {
         </Link>
         <Link to="/donation-posts">
           <button>View Donation Posts</button>
+        </Link>
+        <Link to="/loginV">
+          <button>Login as a Volunteer</button>
         </Link>
 
       </nav>

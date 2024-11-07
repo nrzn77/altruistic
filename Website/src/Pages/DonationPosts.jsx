@@ -1,78 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase-config'; // Firebase config
-import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, orderBy, limit, startAfter, getDoc } from 'firebase/firestore';
+import { db } from '../firebase-config';
+import { useNavigate } from 'react-router-dom';
+
+//import { collection, doc, getDocs } from 'firebase/firestore';
+
 
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [lastVisible, setLastVisible] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [noMorePosts, setNoMorePosts] = useState(false);
+    const navigate = useNavigate()
+
+
+    const fetchInitialPosts = async () => {
+        setLoading(true);
+        const postsQuery = query(
+            collection(db, 'NGO_Posts'),
+            orderBy('createdAt', 'desc'),
+            limit(5)
+        );
+        const postsSnapshot = await getDocs(postsQuery);
+        const lastVisiblePost = postsSnapshot.docs[postsSnapshot.docs.length - 1];
+
+
+        const postsList = await Promise.all(
+            postsSnapshot.docs.map(async (docSnapshot) => {
+                const postData = docSnapshot.data();
+
+                const ngoRef = doc(db, 'NGOs', postData.createdBy);  // Use createdBy to fetch NGO
+                const ngoSnapshot = await getDoc(ngoRef);
+                const ngoData = ngoSnapshot.exists() ? ngoSnapshot.data() : null;
+
+                return {
+                    ...postData,
+                    ngoName: ngoData ? ngoData.name : postData.ngoEmail,
+                    id: docSnapshot.id
+                };
+            })
+        );
+
+        setPosts(postsList);
+        setLastVisible(lastVisiblePost);
+        setLoading(false);
+        if (postsSnapshot.size < 5) {
+            setNoMorePosts(true); // No more posts to load
+        }
+    };
+
+
+    const fetchMorePosts = async () => {
+        if (loading || noMorePosts) return;
+
+        setLoading(true);
+        const postsQuery = query(
+            collection(db, 'NGO_Posts'),
+            orderBy('createdAt', 'desc'),
+            startAfter(lastVisible),
+            limit(5)
+        );
+        const postsSnapshot = await getDocs(postsQuery);
+        const lastVisiblePost = postsSnapshot.docs[postsSnapshot.docs.length - 1];
+
+        if (!lastVisiblePost) {
+            setNoMorePosts(true);
+            setLoading(false);
+            return;
+        }
+
+        const morePostsList = await Promise.all(
+            postsSnapshot.docs.map(async (docSnapshot) => {
+                const postData = docSnapshot.data();
+
+                const ngoRef = doc(db, 'NGOs', postData.createdBy);
+                const ngoSnapshot = await getDoc(ngoRef);
+                const ngoData = ngoSnapshot.exists() ? ngoSnapshot.data() : null;
+
+                return {
+                    ...postData,
+                    ngoName: ngoData ? ngoData.name : postData.ngoEmail,
+                    id: docSnapshot.id
+                };
+            })
+        );
+
+        setPosts((prevPosts) => [...prevPosts, ...morePostsList]);
+        setLastVisible(lastVisiblePost);
+        setLoading(false);
+        if (postsSnapshot.size < 5) {
+            setNoMorePosts(true);
+        }
+    };
 
     useEffect(() => {
-        // Function to fetch posts from Firestore
-        const fetchPosts = async () => {
-            try {
-                const postsCollection = collection(db, 'NGO_Posts');
-                const postsSnapshot = await getDocs(postsCollection);
-
-                // Create a list of promises to fetch each NGO's name
-                const postsList = await Promise.all(
-                    postsSnapshot.docs.map(async (docSnapshot) => {
-                        const postData = docSnapshot.data();
-
-
-                        // Query the NGO collection where the userId matches the post's createdBy field
-                        const ngoQuery = query(collection(db, 'NGOs'), where('userId', '==', postData.createdBy));
-                        const ngoSnapshot = await getDocs(ngoQuery);
-
-                        let ngoData = null;
-                        ngoSnapshot.forEach((doc) => {
-                            ngoData = doc.data();  // Assuming there will be only one result
-                        });
-
-                        return {
-                            ...postData,
-                            ngoName: ngoData ? ngoData.name : postData.ngoEmail, //use email just in case
-                            id: docSnapshot.id
-                        };
-                    })
-                );
-
-                setPosts(postsList);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchPosts();
+        fetchInitialPosts();
     }, []);
 
-    if (loading) {
-        return <p>Loading posts...</p>;
-    }
+    const viewNGOOverview = (ngoId) => {
+        navigate("/ngo/" + ngoId)
+        console.log(`Viewing NGO Overview for: ${ngoId}`);
+    };
 
     return (
-        <div className="donation-posts">
+        <div>
             <h2>Donation Posts</h2>
-            {posts.length > 0 ? (
-                <ul>
-                    {posts.map((post) => (
-                        <li key={post.id} className="post-item">
-                            <h3>{post.title}</h3>
-                            <p><strong>NGO:</strong> {post.ngoName}</p>
-                            <p><strong>Description:</strong> {post.description}</p>
-                            <p><strong>Cause:</strong> {post.cause}</p>
-                            <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
-                            <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
-                            <p><strong>Posted On:</strong> {new Date(post.createdAt.seconds * 1000).toLocaleDateString()}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No posts available at the moment.</p>
+            <div className="posts-container">
+                {posts.map((post) => (
+                    <div key={post.id} className="post-card">
+                        <h3>{post.title}</h3>
+                        <p><strong>Description:</strong> {post.description}</p>
+                        <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
+                        <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
+                        <p><strong>NGO Name:</strong> {post.ngoName}</p>
+                        {/* Add a button to view NGO overview */}
+                        <button onClick={() => viewNGOOverview(post.createdBy)}>View NGO Overview</button>
+                    </div>
+                ))}
+            </div>
+
+            {loading && <p>Loading more posts...</p>}
+
+            {!loading && !noMorePosts && (
+                <button onClick={fetchMorePosts}>Load More Posts</button>
             )}
+
+            {noMorePosts && <p>No more posts to load.</p>}
         </div>
     );
+    
 };
+
 
 export default DonationPosts;

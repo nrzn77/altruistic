@@ -59,6 +59,7 @@ const RegisterVolunteer = () => {
         gender,
         availability,
         area,
+        role: 'Volunteer',
         photoURL, // Store photo URL
         email: user.email // Optionally store the email for easy access
       });
