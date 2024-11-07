@@ -92,12 +92,12 @@ section button{
   color: white;
   display: inline-block;
   box-sizing: border-box;
-  transition: background-color .1s;
+  transition: background-color .2s, border-radius .2s;
   margin: 10px;
   font-size: 150%;
 }
 section button:hover{
-  border: 1px solid var(--blue);
+  border-radius: 8px;
   background-color: var(--purple);
 }
 
