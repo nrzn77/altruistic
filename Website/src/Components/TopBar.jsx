@@ -33,7 +33,10 @@ export function TopBar({ user, logout }) {
             </div>
             <div className={menuOpen ? 'menu show' : 'menu'}>
                 <Link to="/login">
-                    Login
+                    Login as NGO
+                </Link>
+                <Link to="/loginV">
+                    Login as Volunteer
                 </Link>
                 <Link to="/register">
                     Create Account
