@@ -11,6 +11,7 @@ const RegisterNGO = () => {
     licenseNo: '',
     email: '',
     phone: '',
+   
     paymentInfo: {
       cash: '',
       mobilePayment: '',
@@ -83,7 +84,8 @@ const RegisterNGO = () => {
             bankName: formData.paymentInfo.wireTransfer.bankName,
           }
         },
-        userId: user.uid
+        userId: user.uid,
+        role: 'NGO'
       });
 
       alert('NGO registration complete!');

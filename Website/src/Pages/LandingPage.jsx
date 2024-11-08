@@ -30,7 +30,9 @@ export default function LandingPage() {
       <h1><PiHandCoinsDuotone />ClearAid</h1>
       <div>Altruism Discretion Transparency</div>
     </header>
-
+    <section>
+      <h2>Your trusted place for making donations</h2>
+    </section>
     <section>
       <p className="hidden">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores aspernatur quod voluptatem incidunt tenetur delectus laboriosam exercitationem blanditiis ducimus reiciendis vero adipisci corrupti obcaecati, facilis nemo nesciunt neque vel dignissimos sed. Impedit tempora soluta ipsum molestiae sed eum harum distinctio doloribus tempore vitae quisquam obcaecati nulla, optio iusto, aliquid voluptate!<br />
         <Link to="/donation-posts">
@@ -50,7 +52,7 @@ export default function LandingPage() {
     <section>
       <p className="hidden">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores aspernatur quod voluptatem incidunt tenetur delectus laboriosam exercitationem blanditiis ducimus reiciendis vero adipisci corrupti obcaecati, facilis nemo nesciunt neque vel dignissimos sed. Impedit tempora soluta ipsum molestiae sed eum harum distinctio doloribus tempore vitae quisquam obcaecati nulla, optio iusto, aliquid voluptate!<br />
         <Link to="/registerNGO">
-          <button>Register as a Volunteer</button>
+          <button>Register as a NGO</button>
         </Link>
       </p>
       <img src={ICON} />
