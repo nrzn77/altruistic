@@ -27,6 +27,12 @@ export default function Canvas() {
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
     };
+    const darkenCanvas = () => {
+        const canvas = canvasReference.current;
+        const context = canvas.getContext("2d");
+        context.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    };
 
     const updateMouse = (e) => {
         mousePosition.current.x = e.clientX;
@@ -123,6 +129,7 @@ export default function Canvas() {
             }
 
             ctx.globalCompositeOperation = "source-over";
+            darkenCanvas();
 
             anim_id = window.requestAnimationFrame(draw)
         }

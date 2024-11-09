@@ -10,6 +10,8 @@ nav {
   left: 0;
   right: 0;
   z-index: 1000;
+  height: 80px;
+  /* overflow: hidden; */
 }
 
 nav h1 {
@@ -22,6 +24,10 @@ nav h1 {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+nav .searchmode {
+  display: none;
 }
 
 nav a {
@@ -42,13 +48,13 @@ nav a:hover {
   cursor: pointer;
 }
 
-.hamburger svg{
+.hamburger svg {
   width: 32px;
   height: 32px;
 }
 
 .search-button {
-  background-color: var(--purple);
+  background-color: transparent;
   color: #fff;
   border: none;
   padding: 10px;
@@ -66,11 +72,10 @@ nav a:hover {
   border: none;
   border-radius: 5px;
   margin-left: 10px;
-  width: 200px;
-  transition: width 0.3s;
+  width: 70%;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1200px) {
   .menu {
     display: none;
     flex-direction: column;
@@ -83,17 +88,18 @@ nav a:hover {
     height: 100vh;
   }
 
-  .menu a{
+  .menu a {
     width: 100%;
     text-align: center;
   }
 
-  .menu.show {
+  .menu.menu-show{
     display: flex;
+    z-index: 100;
   }
 
   .hamburger {
-    display: flex;
+    display: inline;
   }
 
   .dropdown-menu {
@@ -125,7 +131,7 @@ nav a:hover {
   }
 
   .search-input {
-    width: 150px;
+    width: 100%;
   }
 }
 

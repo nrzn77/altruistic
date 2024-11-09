@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdMenu, MdClose } from "react-icons/md";
 import { PiHandCoinsDuotone } from "react-icons/pi";
@@ -7,6 +7,7 @@ import "./TopBar.css";
 
 export function TopBar({ user, logout }) {
     const location = useLocation();
+    const searchBarRef = useRef(null);
     // if(location.pathname === "/") return;
     const [menuOpen, setMenuOpen] = useState(false);
     const [seeMoreOpen, setSeeMoreOpen] = useState(false);
@@ -25,13 +26,16 @@ export function TopBar({ user, logout }) {
         setSearchOpen(!searchOpen);
     };
 
+    useEffect(()=>{
+        if(searchOpen){
+            searchBarRef.current.focus();
+        }
+    }, [searchOpen])
+
     return (
         <nav>
-            <h1 onClick={() => { navigate("/") }}><PiHandCoinsDuotone /> ClearAid</h1>
-            <div className="hamburger" onClick={toggleMenu}>
-                <MdMenu />
-            </div>
-            <div className={menuOpen ? 'menu show' : 'menu'}>
+            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><PiHandCoinsDuotone /> ClearAid</h1>
+            <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 <Link to="/login">
                     Login as NGO
                 </Link>
@@ -60,11 +64,15 @@ export function TopBar({ user, logout }) {
                     )}
                 </div> */}
             </div>
+            {searchOpen && <input type="text" className="search-input" placeholder="Search..." ref={searchBarRef} />}
             <div>
+                <div className={searchOpen ? ' searchmode' : 'hamburger'} onClick={toggleMenu}>
+                    <MdMenu />
+                </div>
+
                 <button className={`search-button ${searchOpen ? 'active' : ''}`} onClick={toggleSearch}>
                     {searchOpen ? <MdClose /> : <FaSearch />}
                 </button>
-                {searchOpen && <input type="text" className="search-input" placeholder="Search..." />}
             </div>
         </nav>
     );

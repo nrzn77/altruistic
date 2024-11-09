@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Roboto:wght@300;400&display=swap');
-:root{
+*{
+  scroll-behavior: smooth;
+}
+:root {
   --blue: #7121DE;
   --purple: #D021DE;
   --pink: #DE218E;
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -49,7 +53,6 @@ header div {
 
 header h1 {
   font-size: 20vmin;
-  text-shadow: 0 0 5px black;
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -58,33 +61,41 @@ section {
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
-  max-width: 950px;
+  /* max-width: 950px; */
   margin: 0 auto;
-  min-height: 100vh;
   background-color: white;
   display: flex;
   text-align: justify;
   align-items: center;
-  justify-content: space-between;
-}
-section:nth-child(odd){
-  flex-direction: row-reverse;
+  justify-content: center;
+  position: relative;
 }
 
-section p{
+.section-content {
+  max-width: 950px;
+  margin: 0 auto;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+
+/* section p {
   display: block;
   width: 50%;
   text-align-last: center;
-}
+} */
 
-section img{
-  width: 300px;
+/* section img {
+  width: 200px;
   margin: 10px;
-  width: 50%;
+  max-width: 50%;
   max-height: 30vh;
-  display: inline-block;
-}
-section button{
+  display: block;
+} */
+
+section button {
   border: none;
   background-color: var(--blue);
   padding: 10px;
@@ -96,88 +107,160 @@ section button{
   margin: 10px;
   font-size: 150%;
 }
-section button:hover{
+
+section button:hover {
   border-radius: 8px;
   background-color: var(--purple);
 }
-section h2{
+
+/* section h2{
   text-align: center;
   width: 100%;
-  font-size: larger;
+  font-size: 3em;
   font-weight: 300;
+} */
+.section-1 {
+  min-height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
-.hidden{
+.section-1 p {
+  z-index: 3;
+  margin: 5px;
+  text-align: center;
+  width: 100%;
+  font-size: 2em;
+  font-weight: 300;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.section-1 .section-content {
+  align-items: flex-start;
+}
+
+.section-1 img {
+  width: 80%;
+  transition: transform .2s;
+}
+
+.section-1 .section-content a {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 33%;
+}
+
+.section-1 .section-content a:hover p {
+  color: var(--blue);
+  cursor: pointer;
+  /* text-shadow: 0 0 5px var(--purple); */
+}
+
+.section-1 a{
+  text-decoration: none;
+  color: black;
+}
+
+.section-1 .section-content div:hover img {
+  transform: scale(1.05);
+}
+
+.section-1 .decoration {
+  background: linear-gradient(to left, var(--blue), var(--purple));
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  border-radius: 59% 41% 66% 34% / 54% 77% 23% 46%;
+  animation: slow-rotate 10s ease infinite;
+  opacity: .6;
+}
+
+.section-1 .one {
+  left: -20px;
+  top: -50px;
+}
+
+.section-1 .two {
+  right: -20px;
+  bottom: -50px;
+  scale: 200%;
+  animation-direction: reverse;
+}
+
+@keyframes slow-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.section-2 {
+  background-image: linear-gradient(to bottom, var(--purple), var(--blue));
+}
+
+.section-2 .section-content {
+  color: white;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 800px;
+}
+
+.section-2 li {
+  margin: 5px;
+  text-align: justify;
+}
+
+.section-3 {
+  position: relative;
+  padding-top: 80px;
+}
+
+.section-3 svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.infodumps {
+  background-size: 70vmin 70vmin;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.infodumps .section-content {
+  min-height: 100vh;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: justify;
+  /* text-align-last: center; */
+  font-size: 150%;
+}
+
+.hidden-default {
   filter: blur(5px);
   transform: translate(0, 20px);
   opacity: 0;
   transition: 1s;
 }
-.show{
+
+.hidden-side {
+  filter: blur(5px);
+  transform: translate(-50%, 0);
+  opacity: 0;
+  transition: 1s;
+}
+
+.show {
   filter: blur(0px);
   transform: translate(0, 0);
   opacity: 1;
 }
-
-
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(218, 10, 10, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #131212;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #000000;
-  }
-} */
