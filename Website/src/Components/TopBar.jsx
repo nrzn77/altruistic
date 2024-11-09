@@ -33,7 +33,7 @@ export function TopBar({ user, logout }) {
     }, [searchOpen])
 
     return (
-        <nav>
+        <nav style={menuOpen ? {backgroundColor:"var(--blue)"}:{}} onClick={()=>{if(menuOpen) setMenuOpen(false)}}>
             <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><PiHandCoinsDuotone /> ClearAid</h1>
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 <Link to="/login">

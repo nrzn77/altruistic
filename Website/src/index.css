@@ -25,6 +25,7 @@ header {
   box-sizing: border-box;
   width: 100vw;
   height: calc(100vh - 80px);
+  /* position: relative; */
 }
 
 header {
@@ -43,7 +44,7 @@ header canvas {
   z-index: -1;
 }
 
-header div {
+header .header-text {
   color: rgb(255, 255, 255);
   text-shadow: 1px 1px 0 rgb(29, 29, 29),
     -1px 1px 0 rgb(29, 29, 29),
@@ -51,10 +52,20 @@ header div {
     -1px -1px 0 rgb(29, 29, 29);
 }
 
-header h1 {
+header .header-title {
   font-size: 20vmin;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+header nav{
+  background-color: transparent;
+  position: absolute;
+  width: 100vw;
+}
+
+header nav:hover{
+  background-color: var(--blue);
 }
 
 section {
@@ -196,6 +207,17 @@ section button:hover {
     transform: rotate(360deg);
   }
 }
+@media screen and (max-width: 500px) {
+  .section-1 .section-content{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .section-1 .section-content a{
+    width: 80%;
+    margin-top: 20px;
+  }
+}
 
 .section-2 {
   background-image: linear-gradient(to bottom, var(--purple), var(--blue));
@@ -257,6 +279,15 @@ section button:hover {
   transform: translate(-50%, 0);
   opacity: 0;
   transition: 1s;
+}
+
+@media screen and (max-width: 1000px) {
+  .hidden-side {
+    filter: blur(0px);
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: 0;
+  }
 }
 
 .show {

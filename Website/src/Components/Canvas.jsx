@@ -30,7 +30,7 @@ export default function Canvas() {
     const darkenCanvas = () => {
         const canvas = canvasReference.current;
         const context = canvas.getContext("2d");
-        context.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        context.fillStyle = 'rgba(0, 0, 0, 0.5)';
         context.fillRect(0, 0, canvas.width, canvas.height);
     };
 

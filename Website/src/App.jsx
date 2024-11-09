@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import Customnavigate from './Components/Customnavigate.jsx';
 import { TopBar } from './Components/TopBar';
 import Login from './Pages/Login'; // Import your login page
 import RegisterVolunteer from './Pages/Registervolunteer'; // Import your registration page
@@ -34,31 +35,40 @@ function App() {
 
   return (
     <Router>
-      <TopBar />
+      <Layout user={user} setUser={setUser}/>
+    </Router>
+  );
+}
+
+function Layout({user, setUser}) {
+  const location = useLocation();
+  return (
+    <>
+      {location.pathname !== "/" && <TopBar />}
       <div className="home-container">
         {/* Routes */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          
+
           {/* NGO Login */}
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          
+          <Route path="/login" element={!user ? <Login /> : <Customnavigate to="/dashboard" />} />
+
           {/* Volunteer Login */}
-          <Route path="/loginV" element={!user ? <LoginVO /> : <Navigate to="/dashboardVolun" />} />
-          
-          <Route path="/register" element={!user ? <RegisterVolunteer /> : <Navigate to="/dashboardVolun" />} />
-          
-          <Route path="/registerNGO" element={!user ? <RegisterNGO /> : <Navigate to="/dashboard" />} />
-          
-          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/dashboardVolun" element={user ? <DashboardVolun /> : <Navigate to="/loginV" />} />
-          <Route path="/CreatePost" element={user ? <NGOPost /> : <Navigate to="/registerNGO" />} />
+          <Route path="/loginV" element={!user ? <LoginVO /> : <Customnavigate to="/dashboardVolun" />} />
+
+          <Route path="/register" element={!user ? <RegisterVolunteer /> : <Customnavigate to="/dashboardVolun" />} />
+
+          <Route path="/registerNGO" element={!user ? <RegisterNGO /> : <Customnavigate to="/dashboard" />} />
+
+          <Route path="/dashboard" element={user ? <Dashboard /> : <Customnavigate to="/login" />} />
+          <Route path="/dashboardVolun" element={user ? <DashboardVolun /> : <Customnavigate to="/loginV" />} />
+          <Route path="/CreatePost" element={user ? <NGOPost /> : <Customnavigate to="/registerNGO" />} />
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />
         </Routes>
       </div>
-    </Router>
-  );
+    </>
+  )
 }
 
 

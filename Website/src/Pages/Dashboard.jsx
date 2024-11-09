@@ -24,11 +24,9 @@ const Dashboard = () => {
       <h1>Welcome to Your Dashboard!</h1>
       <p>You are logged in as {auth.currentUser?.email}</p>
       <button onClick={handleLogout}>Logout</button>
-      <nav>
       <Link to="/CreatePost">
             <button>Create a post asking for money</button>
           </Link>
-          </nav>
           
     </div>
   );

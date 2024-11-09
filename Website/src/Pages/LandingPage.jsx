@@ -1,4 +1,5 @@
 import React from "react";
+import { TopBar } from "../Components/TopBar";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PiHandCoinsDuotone } from "react-icons/pi";
@@ -27,9 +28,10 @@ export default function LandingPage() {
   }, [])
   return <>
     <header>
+      <TopBar />
       <Canvas />
-      <h1><PiHandCoinsDuotone />ClearAid</h1>
-      <div>Altruism Discretion Transparency</div>
+      <h1 className="header-title"><PiHandCoinsDuotone />ClearAid</h1>
+      <div className="header-text">Altruism Discretion Transparency</div>
     </header>
     <section className="section-1">
       <div className="decoration one"></div>
