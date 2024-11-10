@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, doc, getDocs, query, orderBy, limit, startAfter, getDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, orderBy, limit, startAfter, getDoc, where } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,16 @@ const DonationPosts = () => {
     const [noMorePosts, setNoMorePosts] = useState(false);
     const navigate = useNavigate()
 
+
+    const getNGOData = async (postData) => {
+        const ngoRef = collection(db, 'NGOs');
+        const q = query(ngoRef, where('userId', '==', postData.createdBy)); // Query based on userId
+        const ngoSnapshots = await getDocs(q);
+        // if (!ngoSnapshots.empty) {
+        // const ngoData = ngoSnapshots.docs[0].data();
+        const ngoData = ngoSnapshots.docs[0] ? ngoSnapshots.docs[0].data() : null;
+        return ngoData;
+    }
 
     const fetchInitialPosts = async () => {
         setLoading(true);
@@ -29,9 +39,12 @@ const DonationPosts = () => {
             postsSnapshot.docs.map(async (docSnapshot) => {
                 const postData = docSnapshot.data();
 
-                const ngoRef = doc(db, 'NGOs', postData.createdBy);  // Use createdBy to fetch NGO
-                const ngoSnapshot = await getDoc(ngoRef);
-                const ngoData = ngoSnapshot.exists() ? ngoSnapshot.data() : null;
+                // const ngoRef = collection(db, 'NGOs');
+                // const q = query(ngoRef, where('userId', '==', postData.createdBy)); // Query based on userId
+                // const ngoSnapshots = await getDocs(q);
+                // if (!ngoSnapshots.empty) {
+                // const ngoData = ngoSnapshots.docs[0] ? ngoSnapshots.docs[0].data() : null;
+                const ngoData = await getNGOData(postData)
 
                 return {
                     ...postData,
@@ -42,6 +55,7 @@ const DonationPosts = () => {
         );
 
         setPosts(postsList);
+        console.log(postsList[0])
         setLastVisible(lastVisiblePost);
         setLoading(false);
         if (postsSnapshot.size < 5) {
@@ -73,9 +87,10 @@ const DonationPosts = () => {
             postsSnapshot.docs.map(async (docSnapshot) => {
                 const postData = docSnapshot.data();
 
-                const ngoRef = doc(db, 'NGOs', postData.createdBy);
-                const ngoSnapshot = await getDoc(ngoRef);
-                const ngoData = ngoSnapshot.exists() ? ngoSnapshot.data() : null;
+                // const ngoRef = doc(db, 'NGOs', postData.createdBy);
+                // const ngoSnapshot = await getDoc(ngoRef);
+                // const ngoData = ngoSnapshot.exists() ? ngoSnapshot.data() : null;
+                const ngoData = await getNGOData(postData)
 
                 return {
                     ...postData,
@@ -128,7 +143,7 @@ const DonationPosts = () => {
             {noMorePosts && <p>No more posts to load.</p>}
         </div>
     );
-    
+
 };
 
 

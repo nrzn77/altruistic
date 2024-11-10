@@ -26,6 +26,7 @@ const NGOOverview = () => {
       if (!querySnapshot.empty) {
         const ngoData = querySnapshot.docs[0].data(); // Assuming only one match for userId
         setNgoInfo(ngoData);
+        console.log(ngoData)
       } else {
         setError('NGO not found.');
       }
