@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Button } from 'react-bootstrap';
 
-import VolunteerOverview from './VolunteerOverview';
+import VolunteerOverview from '../Components/Volunteer/VolunteerOverview';
 import VolunteerProfile from './VolunteerProfile';
-import MyProjects from './EnrolledProjectsVolunteer';
-import AvailableProjects from './AvailableProjectsVolunteer';
+import MyProjects from '../Components/Volunteer/EnrolledProjectsVolunteer';
+import AvailableProjects from '../Components/Volunteer/AvailableProjectsVolunteer';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
@@ -15,7 +15,7 @@ const Volunteer_Dashboard = () => {
   const [isEnrolled, setIsEnrolled] = useState(false); // Track enrollment status
 
   const volunteerData = {
-    imageURL: "./public/images/profile.png",
+    imageURL: "./images/profile.png",
     name: "John Doe",
     skills: "Project Management, Fundraising",
     experience: "3 years with NGOs",

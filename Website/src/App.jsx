@@ -13,9 +13,6 @@ import DashboardVolun from './Pages/DashboardVolun';
 import LoginVO from './Pages/LoginVO';
 import NGOOverview from './Pages/NGOOverview.jsx';
 
-import VolunteerProfile from './Pages/VolunteerProfile.jsx';
-import MyProjects from './Pages/EnrolledProjectsVolunteer.jsx';
-import AvailableProjects from './Pages/AvailableProjectsVolunteer.jsx';
 
 import { onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth function
 import { auth } from './firebase-config'; // Import your Firebase configuration
