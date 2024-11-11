@@ -1,4 +1,6 @@
 import React from 'react';
+import { FaBirthdayCake } from "react-icons/fa";
+import { MdEmail, MdLocationOn } from "react-icons/md";
 import { Card, Image } from 'react-bootstrap';
 
 const VolunteerOverview = ({ volunteerData }) => {
@@ -7,7 +9,7 @@ const VolunteerOverview = ({ volunteerData }) => {
             <Card.Body>
                 {/* Display Volunteer Image */}
                 <Image
-                    src={volunteerData.imageURL || "default-profile-image.jpg"} // Replace with a default image if none is uploaded
+                    src={volunteerData.photoURL || "default-profile-image.jpg"} // Replace with a default image if none is uploaded
                     roundedCircle
                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                 />
@@ -15,11 +17,18 @@ const VolunteerOverview = ({ volunteerData }) => {
                 {/* Display Volunteer Details */}
                 <Card.Title>{volunteerData.name || "Volunteer Name"}</Card.Title>
                 <Card.Text>
-                    <strong>Skills:</strong> {volunteerData.skills || "No skills listed"}
+                    {volunteerData.gender || "X"} <FaBirthdayCake /> {volunteerData.dob || "X"}
                 </Card.Text>
                 <Card.Text>
-                    <strong>Experience:</strong> {volunteerData.experience || "No experience listed"}
+                    {volunteerData.email && <a href={`mailto:${volunteerData.email}`}><MdEmail />{volunteerData.email}</a>}
                 </Card.Text>
+                <Card.Text>
+                    <MdLocationOn /> {volunteerData.area || "Global"}
+                </Card.Text>
+                <Card.Text>
+                    <strong>Skills:</strong> {volunteerData.skills || "No skills listed"}
+                </Card.Text>
+
             </Card.Body>
         </Card>
     );
