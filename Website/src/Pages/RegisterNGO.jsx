@@ -154,6 +154,7 @@ import { auth, db } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { setRole } from '../Components/role';
 
 const RegisterNGO = () => {
   const [formData, setFormData] = useState({
@@ -211,6 +212,7 @@ const RegisterNGO = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setRole('ngo')
       const userCredential = await createUserWithEmailAndPassword(auth, formData.username, formData.password);
       const user = userCredential.user;
 
@@ -237,6 +239,7 @@ const RegisterNGO = () => {
 
       alert('NGO registration complete!');
     } catch (error) {
+      setRole(null)
       console.error('Error registering NGO:', error);
       alert('Error registering NGO, please try again.');
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Customnavigate from './Components/Customnavigate.jsx';
 import { TopBar } from './Components/TopBar';
 import Login from './Pages/Login'; // Import your login page
@@ -14,14 +14,18 @@ import LoginVO from './Pages/LoginVO';
 import NGOOverview from './Pages/NGOOverview.jsx';
 
 
-import { onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth function
+import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import Firebase Auth function
 import { auth } from './firebase-config'; // Import your Firebase configuration
 // import { useAuthState } from 'react-firebase-hooks/auth';
 
 import 'bootstrap/dist/css/bootstrap.min.css'; // For react bootstrap
 
+import { getRole } from './Components/role.js';
+
 function App() {
   const [user, setUser] = useState(null);
+
+  const [userRole, setUserRole] = useState(getRole);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -30,14 +34,32 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // const navigate = useNavigate()
+
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("User logged out")
+      })
+      .catch((error) => {
+        console.error("Error logging out: ", error);
+      });
+  };
+
+  useEffect(()=>{
+    if(!userRole){
+      logout();
+    }
+  }, [user])
+
   return (
     <Router>
-      <Layout user={user} setUser={setUser}/>
+      <Layout user={user} setUser={setUser} />
     </Router>
   );
 }
 
-function Layout({user, setUser}) {
+function Layout({ user, setUser }) {
   const location = useLocation();
   return (
     <>

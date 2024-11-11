@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Roboto:wght@300;400&display=swap');
-*{
+
+* {
   scroll-behavior: smooth;
 }
+
 :root {
   --blue: #7121DE;
   --purple: #D021DE;
@@ -58,13 +60,13 @@ header .header-title {
   margin-bottom: 5px;
 }
 
-header nav{
+header nav {
   background-color: transparent;
   position: absolute;
   width: 100vw;
 }
 
-header nav:hover{
+header nav:hover {
   background-color: var(--blue);
 }
 
@@ -171,7 +173,7 @@ section button:hover {
   /* text-shadow: 0 0 5px var(--purple); */
 }
 
-.section-1 a{
+.section-1 a {
   text-decoration: none;
   color: black;
 }
@@ -207,13 +209,15 @@ section button:hover {
     transform: rotate(360deg);
   }
 }
+
 @media screen and (max-width: 500px) {
-  .section-1 .section-content{
+  .section-1 .section-content {
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .section-1 .section-content a{
+
+  .section-1 .section-content a {
     width: 80%;
     margin-top: 20px;
   }
@@ -294,4 +298,38 @@ section button:hover {
   filter: blur(0px);
   transform: translate(0, 0);
   opacity: 1;
+}
+
+.Donations-page {
+  text-align: center;
+  background-color: #EEE;
+  min-height: 100vh;
+}
+
+.posts-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.post-creator:hover {
+  color: var(--purple);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+meter {
+  width: 80%;
+}
+
+.post-card {
+  text-align: justify;
+  padding: 10px;
+  margin: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background-color: white; 
+  box-shadow: 10px 10px 20px rgba(189, 189, 189, 0.6);
+  /* border-radius: 2vmin;
+  padding: 4vmin; */
 }
