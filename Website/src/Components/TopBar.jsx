@@ -3,9 +3,11 @@ import { FaSearch } from "react-icons/fa";
 import { MdMenu, MdClose } from "react-icons/md";
 import { PiHandCoinsDuotone } from "react-icons/pi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { auth } from "../firebase-config";
+import { signOut } from "firebase/auth";
 import "./TopBar.css";
 
-export function TopBar({ userRole }) {
+export function TopBar({ userRole, setUserRole }) {
     const location = useLocation();
     const searchBarRef = useRef(null);
     // if(location.pathname === "/") return;
@@ -13,6 +15,17 @@ export function TopBar({ userRole }) {
     const [seeMoreOpen, setSeeMoreOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
     const navigate = useNavigate();
+
+    const logout = () => {
+        signOut(auth)
+          .then(() => {
+            setUserRole(null);
+            console.log("User logged out")
+          })
+          .catch((error) => {
+            console.error("Error logging out: ", error);
+          });
+      };
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -60,6 +73,11 @@ export function TopBar({ userRole }) {
                     <Link to="/dashboardVolun">
                         Volunteer Dashboard
                     </Link>
+                }
+                {
+                    userRole && <a onClick={logout} style={{cursor: "pointer"}}>
+                        Logout
+                    </a>
                 }
                 <Link to="/donation-posts">
                     View Donation Posts

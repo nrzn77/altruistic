@@ -7,7 +7,7 @@ import Canvas from "../Components/Canvas";
 import ICON from "../assets/react.svg"
 import ICON2 from "../assets/react - Copy.svg"
 
-export default function LandingPage({userRole}) {
+export default function LandingPage({userRole, setUserRole}) {
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries, self) => {
@@ -28,7 +28,7 @@ export default function LandingPage({userRole}) {
   }, [])
   return <>
     <header>
-      <TopBar userRole={userRole}/>
+      <TopBar userRole={userRole} setUserRole={setUserRole}/>
       <Canvas />
       <h1 className="header-title"><PiHandCoinsDuotone />ClearAid</h1>
       <div className="header-text">Altruism Discretion Transparency</div>

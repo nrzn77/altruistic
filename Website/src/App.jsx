@@ -67,11 +67,11 @@ function Layout({ user, userRole, setUserRole }) {
   const location = useLocation();
   return (
     <>
-      {location.pathname !== "/" && <TopBar userRole={userRole}/>}
+      {location.pathname !== "/" && <TopBar userRole={userRole} setUserRole={setUserRole}/>}
       <div className="home-container">
         {/* Routes */}
         <Routes>
-          <Route path="/" element={<LandingPage userRole={userRole}/>} />
+          <Route path="/" element={<LandingPage userRole={userRole} setUserRole={setUserRole}/>} />
 
           {/* NGO Login */}
           <Route path="/login" element={!user ? <Login setUserRole={setUserRole} /> : <Customnavigate to="/dashboard" />} />
