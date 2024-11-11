@@ -5,7 +5,7 @@ import { PiHandCoinsDuotone } from "react-icons/pi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./TopBar.css";
 
-export function TopBar({ user, logout }) {
+export function TopBar({ userRole }) {
     const location = useLocation();
     const searchBarRef = useRef(null);
     // if(location.pathname === "/") return;
@@ -26,29 +26,41 @@ export function TopBar({ user, logout }) {
         setSearchOpen(!searchOpen);
     };
 
-    useEffect(()=>{
-        if(searchOpen){
+    useEffect(() => {
+        if (searchOpen) {
             searchBarRef.current.focus();
         }
     }, [searchOpen])
 
     return (
-        <nav style={menuOpen ? {backgroundColor:"var(--blue)"}:{}} onClick={()=>{if(menuOpen) setMenuOpen(false)}}>
+        <nav style={menuOpen ? { backgroundColor: "var(--blue)" } : {}} onClick={() => { if (menuOpen) setMenuOpen(false) }}>
             <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><PiHandCoinsDuotone /> ClearAid</h1>
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
-                <Link to="/login">
-                    Login as NGO
-                </Link>
-                <Link to="/loginV">
-                    Login as Volunteer
-                </Link>
-                <Link to="/register">
-                    Create Account
-                </Link>
+                {!userRole && <>
+                    <Link to="/login">
+                        Login as NGO
+                    </Link>
+                    <Link to="/loginV">
+                        Login as Volunteer
+                    </Link>
+                    <Link to="/register">
+                        Become a Volunteer
+                    </Link>
 
-                <Link to="/registerNGO">
-                    Register as a NGO
-                </Link>
+                    <Link to="/registerNGO">
+                        Register an NGO
+                    </Link></>
+                }
+                {userRole == "ngo" &&
+                    <Link to="/dashboard">
+                        NGO Dashboard
+                    </Link>
+                }
+                {userRole == "volunteer" &&
+                    <Link to="/dashboardVolun">
+                        Volunteer Dashboard
+                    </Link>
+                }
                 <Link to="/donation-posts">
                     View Donation Posts
                 </Link>

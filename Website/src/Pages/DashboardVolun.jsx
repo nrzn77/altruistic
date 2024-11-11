@@ -9,9 +9,9 @@ import AvailableProjects from '../Components/Volunteer/AvailableProjectsVoluntee
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
-import { setRole } from '../Components/role';
+// import { setRole } from '../Components/role';
 
-const Volunteer_Dashboard = () => {
+const Volunteer_Dashboard = ({setUserRole}) => {
   const [activeTab, setActiveTab] = useState('overview'); // Default to 'overview'
   const [isEnrolled, setIsEnrolled] = useState(false); // Track enrollment status
 
@@ -38,7 +38,7 @@ const Volunteer_Dashboard = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setRole(null)
+        setUserRole(null)
         navigate('/loginV'); // Redirect to login page after logout
       })
       .catch((error) => {

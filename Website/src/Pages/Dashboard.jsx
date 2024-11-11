@@ -3,17 +3,17 @@ import React from 'react';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
 import { Route, useNavigate, Link } from 'react-router-dom';
-import { setRole } from '../Components/role';
+// import { setRole } from '../Components/role';
 
 // import NGOPost from './Pages/CreatePostN';
 
-const Dashboard = () => {
+const Dashboard = ({setUserRole}) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setRole(null)
+        setUserRole(null)
         navigate('/login'); // Redirect to login page after logout
       })
       .catch((error) => {

@@ -73,9 +73,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase-config'; // Import the initialized auth from firebase-config.js
-import { setRole } from '../Components/role';
+// import { setRole } from '../Components/role';
 
-const Login = () => {
+const Login = ({setUserRole}) => {
   const googleProvider = new GoogleAuthProvider();
 
   const handleEmailLogin = (e) => {
@@ -85,7 +85,7 @@ const Login = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setRole("ngo")
+        setUserRole("ngo")
         console.log('User signed in with email:', userCredential.user);
       })
       .catch((error) => {

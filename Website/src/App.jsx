@@ -20,7 +20,7 @@ import { auth } from './firebase-config'; // Import your Firebase configuration
 
 import 'bootstrap/dist/css/bootstrap.min.css'; // For react bootstrap
 
-import { getRole } from './Components/role.js';
+import { getRole, setRole } from './Components/role.js';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -47,6 +47,10 @@ function App() {
   };
 
   useEffect(()=>{
+    setRole(userRole);
+  }, [userRole])
+
+  useEffect(()=>{
     if(!userRole){
       logout();
     }
@@ -54,33 +58,33 @@ function App() {
 
   return (
     <Router>
-      <Layout user={user} setUser={setUser} />
+      <Layout user={user} userRole={userRole} setUserRole={setUserRole}/>
     </Router>
   );
 }
 
-function Layout({ user, setUser }) {
+function Layout({ user, userRole, setUserRole }) {
   const location = useLocation();
   return (
     <>
-      {location.pathname !== "/" && <TopBar />}
+      {location.pathname !== "/" && <TopBar userRole={userRole}/>}
       <div className="home-container">
         {/* Routes */}
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage userRole={userRole}/>} />
 
           {/* NGO Login */}
-          <Route path="/login" element={!user ? <Login /> : <Customnavigate to="/dashboard" />} />
+          <Route path="/login" element={!user ? <Login setUserRole={setUserRole} /> : <Customnavigate to="/dashboard" />} />
 
           {/* Volunteer Login */}
-          <Route path="/loginV" element={!user ? <LoginVO /> : <Customnavigate to="/dashboardVolun" />} />
+          <Route path="/loginV" element={!user ? <LoginVO setUserRole={setUserRole} /> : <Customnavigate to="/dashboardVolun" />} />
 
-          <Route path="/register" element={!user ? <RegisterVolunteer /> : <Customnavigate to="/dashboardVolun" />} />
+          <Route path="/register" element={!user ? <RegisterVolunteer setUserRole={setUserRole} /> : <Customnavigate to="/dashboardVolun" />} />
 
-          <Route path="/registerNGO" element={!user ? <RegisterNGO /> : <Customnavigate to="/dashboard" />} />
+          <Route path="/registerNGO" element={!user ? <RegisterNGO setUserRole={setUserRole} /> : <Customnavigate to="/dashboard" />} />
 
-          <Route path="/dashboard" element={user ? <Dashboard /> : <Customnavigate to="/login" />} />
-          <Route path="/dashboardVolun" element={user ? <DashboardVolun /> : <Customnavigate to="/loginV" />} />
+          <Route path="/dashboard" element={user ? <Dashboard setUserRole={setUserRole} /> : <Customnavigate to="/login" />} />
+          <Route path="/dashboardVolun" element={user ? <DashboardVolun setUserRole={setUserRole} /> : <Customnavigate to="/loginV" />} />
           <Route path="/CreatePost" element={user ? <NGOPost /> : <Customnavigate to="/registerNGO" />} />
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />

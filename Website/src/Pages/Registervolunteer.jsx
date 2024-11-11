@@ -144,9 +144,9 @@ import axios from 'axios';
 import { auth, db } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { setRole } from '../Components/role';
+// import { setRole } from '../Components/role';
 
-const RegisterVolunteer = () => {
+const RegisterVolunteer = ({setUserRole}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -163,7 +163,7 @@ const RegisterVolunteer = () => {
     setLoading(true);
 
     try {
-      setRole('volunteer');
+      setUserRole('volunteer');
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       let photoURL = '';
@@ -198,7 +198,7 @@ const RegisterVolunteer = () => {
     } catch (error) {
       console.error('Error registering volunteer: ', error);
       alert('Error registering volunteer. Please try again.');
-      setRole(null);
+      setUserRole(null);
     } finally {
       setLoading(false);
     }
