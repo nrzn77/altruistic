@@ -48,7 +48,6 @@ const DonationPosts = () => {
     };
 
     const fetchMorePosts = async () => {
-        // console.log("AAaAAAAaAaAAaA")
         if (loading || noMorePosts) return;
         setLoading(true);
         const postsQuery = query(
@@ -94,6 +93,16 @@ const DonationPosts = () => {
         navigate("/ngo/" + ngoId);
     };
 
+    const goToPayment = (postId, reachedAmount, targetedAmount) => {
+        navigate("/payment-gateway", {
+            state: {
+                postId,
+                currentReachedAmount: reachedAmount,
+                targetedAmount
+            }
+        });
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -110,17 +119,17 @@ const DonationPosts = () => {
         <div className="Donations-page">
             <h2>Donation Posts</h2>
             <div className="posts-container">
-                {posts.map((post, index) => (
+                {posts.map((post) => (
                     <div key={post.id} className="post-card">
                         <h3>{post.title}</h3>
                         <h6 className='post-creator' onClick={() => viewNGOOverview(post.createdBy)}>{post.ngoName}</h6>
-                        <p> {post.description}</p>
+                        <p>{post.description}</p>
                         <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
                         <meter value={post.reachedAmount} min="0" max={post.targetedAmount}></meter>
                         <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
-                        {/* <p><strong>NGO Name:</strong> </p> */}
-                        <button type="button">Donate Now!</button>
-                        
+                        <button type="button" onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount)}>
+                            Donate Now!
+                        </button>
                     </div>
                 ))}
             </div>

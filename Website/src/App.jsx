@@ -12,6 +12,9 @@ import DonationPosts from './Pages/DonationPosts';
 import DashboardVolun from './Pages/DashboardVolun';
 import LoginVO from './Pages/LoginVO';
 import NGOOverview from './Pages/NGOOverview.jsx';
+import PaymentGateway from './Pages/PaymentGateway';
+
+//ar koto import korbo bhai?
 
 
 import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import Firebase Auth function
@@ -88,6 +91,7 @@ function Layout({ user, userRole, setUserRole }) {
           <Route path="/CreatePost" element={user ? <NGOPost /> : <Customnavigate to="/registerNGO" />} />
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />
+          <Route path="/payment-gateway" element={<PaymentGateway />} />
         </Routes>
       </div>
     </>
