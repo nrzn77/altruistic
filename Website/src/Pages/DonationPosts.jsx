@@ -93,12 +93,13 @@ const DonationPosts = () => {
         navigate("/ngo/" + ngoId);
     };
 
-    const goToPayment = (postId, reachedAmount, targetedAmount) => {
+    const goToPayment = (postId, reachedAmount, targetedAmount,ngoName) => {
         navigate("/payment-gateway", {
             state: {
                 postId,
                 currentReachedAmount: reachedAmount,
-                targetedAmount
+                targetedAmount,
+                ngoName
             }
         });
     };
@@ -127,7 +128,7 @@ const DonationPosts = () => {
                         <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
                         <meter value={post.reachedAmount} min="0" max={post.targetedAmount}></meter>
                         <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
-                        <button type="button" onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount)}>
+                        <button type="button" onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount,post.ngoName)}>
                             Donate Now!
                         </button>
                     </div>
