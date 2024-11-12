@@ -59,8 +59,12 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
   useEffect(() => {
     async function getData() {
       const a = await fetchVolunteerByUID(auth.currentUser.uid);
-      setVolunteerData(a);
-      console.log(a)
+      if (!a) {
+        handleLogout();
+      }
+      else {
+        setVolunteerData(a);
+      }
       return a;
     }
     getData()

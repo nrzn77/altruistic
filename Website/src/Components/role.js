@@ -3,7 +3,10 @@ const setRole = (role) => {
 }
 
 const getRole = () => {
-    return window.localStorage['role'] ?? null;
+    if(!window.localStorage['role'] || window.localStorage['role'] == "null"){
+        return null;
+    }
+    return window.localStorage['role'];
 }
 
 export {setRole, getRole}

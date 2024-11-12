@@ -56,6 +56,10 @@ function App() {
   useEffect(()=>{
     if(!userRole){
       logout();
+      console.log('Logged Out')
+    }
+    else{
+      console.log(userRole)
     }
   }, [user])
 

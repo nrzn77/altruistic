@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import { MdDelete } from "react-icons/md";
 
-const NGOOverview = () => {
-  const { ngoId } = useParams(); // ngoId is actually the userId of the NGO
+const NGOOverview = ({ ngoId: propNgoId }) => {
+  const { ngoId: urlNgoId } = useParams(); // ngoId is actually the userId of the NGO
+  const ngoId = propNgoId || urlNgoId;
   const [ngoInfo, setNgoInfo] = useState(null);
   const [ngoPosts, setNgoPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,6 +47,7 @@ const NGOOverview = () => {
       const postsSnapshot = await getDocs(q);
       const postsList = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setNgoPosts(postsList);
+      console.log(postsList)
     } catch (err) {
       console.error("Error fetching NGO posts: ", err);
     }
@@ -68,7 +71,12 @@ const NGOOverview = () => {
           {ngoPosts.length > 0 ? (
             <ul>
               {ngoPosts.map((post) => (
-                <li key={post.id}>{post.title}</li>
+                <li key={post.id}>
+                  <h2>{post.title}</h2>
+                  <p>{post.description}</p>
+                  <p>{post.reachedAmount}/{post.targetedAmount}</p>
+                  {propNgoId && <button><MdDelete /></button>}
+                </li>
               ))}
             </ul>
           ) : (

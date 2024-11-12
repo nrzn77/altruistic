@@ -1,13 +1,14 @@
 // src/Pages/Dashboard.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
 import { Route, useNavigate, Link } from 'react-router-dom';
+import NGOOverview from './NGOOverview';
 // import { setRole } from '../Components/role';
 
 // import NGOPost from './Pages/CreatePostN';
 
-const Dashboard = ({setUserRole}) => {
+const Dashboard = ({ setUserRole }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,9 +28,9 @@ const Dashboard = ({setUserRole}) => {
       <p>You are logged in as {auth.currentUser?.email}</p>
       <button onClick={handleLogout}>Logout</button>
       <Link to="/CreatePost">
-            <button>Create a post asking for money</button>
-          </Link>
-          
+        <button>Create a post asking for money</button>
+      </Link>
+      <NGOOverview ngoId={auth.currentUser?.uid} />
     </div>
   );
 };
