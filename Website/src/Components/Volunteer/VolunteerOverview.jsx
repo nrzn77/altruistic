@@ -9,7 +9,7 @@ const VolunteerOverview = ({ volunteerData }) => {
             <Card.Body>
                 {/* Display Volunteer Image */}
                 <Image
-                    src={volunteerData.photoURL || "default-profile-image.jpg"} // Replace with a default image if none is uploaded
+                    src={volunteerData.photoURL || "/images/profile.png"} // Replace with a default image if none is uploaded
                     roundedCircle
                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                 />
