@@ -60,6 +60,7 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
     async function getData() {
       const a = await fetchVolunteerByUID(auth.currentUser.uid);
       if (!a) {
+        console.log(a)
         handleLogout();
       }
       else {
