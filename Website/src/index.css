@@ -260,6 +260,27 @@ section button:hover {
   background-repeat: no-repeat;
 }
 
+.infodumps-2 {
+  background-color: var(--pink);
+  color: white;
+}
+
+.infodumps-2 a,
+.infodumps-3 a {
+  color: #EEE;
+}
+
+.infodumps-2 a:hover,
+.infodumps-3 a:hover {
+  color: #DDD;
+}
+
+.infodumps-3 {
+  background-color: var(--blue);
+  color: white;
+}
+
+
 .infodumps .section-content {
   min-height: 100vh;
   box-sizing: border-box;
@@ -328,7 +349,7 @@ meter {
   margin: 10px;
   margin-bottom: 15px;
   border-radius: 10px;
-  background-color: white; 
+  background-color: white;
   box-shadow: 10px 10px 20px rgba(189, 189, 189, 0.6);
   /* border-radius: 2vmin;
   padding: 4vmin; */
