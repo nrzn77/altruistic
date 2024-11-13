@@ -13,7 +13,7 @@ import DashboardVolun from './Pages/DashboardVolun';
 import LoginVO from './Pages/LoginVO';
 import NGOOverview from './Pages/NGOOverview.jsx';
 import PaymentGateway from './Pages/PaymentGateway';
-import AvailableVolunteers from './Pages/AvailableVolunteers';  // one more import & we will be done lol
+//import AvailableVolunteers from './Pages/AvailableVolunteers';  // one more import & we will be done lol
 
 
 //ar koto import korbo bhai?
@@ -98,9 +98,8 @@ function Layout({ user, userRole, setUserRole }) {
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />
           <Route path="/payment-gateway" element={<PaymentGateway />} />
-          <Route path="/AvailableVolunteer" 
-            element={user && userRole === 'NGO' ? <AvailableVolunteers /> : <Customnavigate to="/login" />} 
-          />
+          
+           
         </Routes>
       </div>
     </>
