@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
-import { MdDelete } from "react-icons/md";
 
-const NGOOverview = ({ ngoId: propNgoId }) => {
-  const { ngoId: urlNgoId } = useParams(); // ngoId is actually the userId of the NGO
-  const ngoId = propNgoId || urlNgoId;
+const NGOOverview = () => {
+  const {ngoId} = useParams();
   const [ngoInfo, setNgoInfo] = useState(null);
   const [ngoPosts, setNgoPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +73,6 @@ const NGOOverview = ({ ngoId: propNgoId }) => {
                   <h2>{post.title}</h2>
                   <p>{post.description}</p>
                   <p>{post.reachedAmount}/{post.targetedAmount}</p>
-                  {propNgoId && <button><MdDelete /></button>}
                 </li>
               ))}
             </ul>
