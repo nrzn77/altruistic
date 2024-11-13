@@ -3,6 +3,8 @@ import { collection, getDocs, query, orderBy, limit, startAfter, where } from 'f
 import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 
+import './Donation.css' // CSS FILE FOR THE DONATION PAGE
+
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
     const [lastVisible, setLastVisible] = useState(null);
@@ -93,7 +95,7 @@ const DonationPosts = () => {
         navigate("/ngo/" + ngoId);
     };
 
-    const goToPayment = (postId, reachedAmount, targetedAmount,ngoName) => {
+    const goToPayment = (postId, reachedAmount, targetedAmount, ngoName) => {
         navigate("/payment-gateway", {
             state: {
                 postId,
@@ -126,9 +128,11 @@ const DonationPosts = () => {
                         <h6 className='post-creator' onClick={() => viewNGOOverview(post.createdBy)}>{post.ngoName}</h6>
                         <p>{post.description}</p>
                         <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
-                        <meter value={post.reachedAmount} min="0" max={post.targetedAmount}></meter>
+                        <meter value={post.reachedAmount} min="0" max={post.targetedAmount}
+                            style={{ width: '100%', height: '35px' }}></meter>
                         <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
-                        <button type="button" onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount,post.ngoName)}>
+                        <button type="button" className="btn btn-primary mt-3 w-100"
+                            style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, post.ngoName)}>
                             Donate Now!
                         </button>
                     </div>
@@ -142,3 +146,6 @@ const DonationPosts = () => {
 };
 
 export default DonationPosts;
+
+
+
