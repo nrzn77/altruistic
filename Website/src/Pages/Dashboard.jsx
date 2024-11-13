@@ -30,6 +30,9 @@ const Dashboard = ({ setUserRole }) => {
       <Link to="/CreatePost">
         <button>Create a post asking for money</button>
       </Link>
+      <Link to ="/AvailableVolunteer">
+      <button> Available Vlunteers </button>
+      </Link>
       <NGOOverview ngoId={auth.currentUser?.uid} />
     </div>
   );
