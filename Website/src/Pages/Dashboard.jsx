@@ -90,12 +90,6 @@ const Dashboard = ({ setUserRole }) => {
       <Link to="/CreatePost">
         <button>Create a post asking for money</button>
       </Link>
-<<<<<<< HEAD
-      <Link to ="/AvailableVolunteer">
-      <button> Available Vlunteers </button>
-      </Link>
-      <NGOOverview ngoId={auth.currentUser?.uid} />
-=======
       {NGOData && <div>
         <details>
           <summary>NGO Information</summary>
@@ -136,7 +130,6 @@ const Dashboard = ({ setUserRole }) => {
         </details>
       </div>}
       {/* <NGOOverview ngoId={auth.currentUser?.uid} /> */}
->>>>>>> dd97ee7b2005d587573cbdbda9b7a8c56cbc5f74
     </div>
   );
 };
