@@ -1,15 +1,9 @@
-// src/Pages/Dashboard.jsx
 import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
-// import { doc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase-config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { useNavigate, Link } from 'react-router-dom';
-// import NGOOverview from './NGOOverview';
-// import { setRole } from '../Components/role';
-
-// import NGOPost from './Pages/CreatePostN';
 
 const Dashboard = ({ setUserRole }) => {
   const navigate = useNavigate();
@@ -25,9 +19,9 @@ const Dashboard = ({ setUserRole }) => {
       if (!querySnapshot.empty) {
         const ngoData = querySnapshot.docs[0].data(); // Assuming only one match for userId
         setNGOData(ngoData);
-        return ngoData
+        return ngoData;
       } else {
-        setError('NGO not found.');
+        console.error('NGO not found.');
       }
     } catch (error) {
       console.error('Error fetching NGO:', error);
@@ -42,45 +36,48 @@ const Dashboard = ({ setUserRole }) => {
       const postsSnapshot = await getDocs(q);
       const postsList = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setNgoPosts(postsList);
-      console.log(postsList)
+      console.log(postsList);
     } catch (err) {
-      console.error("Error fetching NGO posts: ", err);
+      console.error('Error fetching NGO posts: ', err);
     }
   };
 
-
   useEffect(() => {
-    console.log(auth.currentUser.uid)
     async function getData() {
       const a = await fetchNGOByUID(auth.currentUser.uid);
       if (!a) {
         handleLogout();
-      }
-      else {
+      } else {
         setNGOData(a);
-        fetchNgoPosts(auth.currentUser.uid)
+        fetchNgoPosts(auth.currentUser.uid);
       }
-      return a;
     }
-    getData()
-  }, [])
+    getData();
+  }, []);
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setUserRole(null)
+        setUserRole(null);
         navigate('/login'); // Redirect to login page after logout
       })
       .catch((error) => {
-        console.error("Error logging out: ", error);
+        console.error('Error logging out: ', error);
       });
   };
 
-  const deletePost = (PID) => {
-    if(confirm("Delete this post?")){
-      alert("Deleted the post " + PID)
+  const deletePost = async (PID) => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      try {
+        await deleteDoc(doc(db, 'NGO_Posts', PID)); // Deleting the post document from Firestore
+        setNgoPosts(NgoPosts.filter(post => post.id !== PID)); // state also deleted
+        alert('Post deleted successfully.');
+      } catch (error) {
+        console.error('Error deleting post: ', error);
+        alert('Failed to delete the post.');
+      }
     }
-  }
+  };
 
   return (
     <div>
@@ -90,46 +87,47 @@ const Dashboard = ({ setUserRole }) => {
       <Link to="/CreatePost">
         <button>Create a post asking for money</button>
       </Link>
-      {NGOData && <div>
-        <details>
-          <summary>NGO Information</summary>
-          <p><strong>Name:</strong> {NGOData.name}</p>
-          <p><strong>License No:</strong> {NGOData.licenseNo}</p>
-          <p><strong>About Us:</strong> {NGOData.aboutUs}</p>
-        </details>
-        <details>
-          <summary>Contact Information</summary>
-          <p><strong>Phone:</strong> {NGOData.contactInfo.phone}</p>
-          <p><strong>Email:</strong> {NGOData.contactInfo.email}</p>
-        </details>
-        <details>
-          <summary>Payment Information</summary>
-          <h3>Wire Transfer</h3>
-          <p><strong>Account Number:</strong> {NGOData.paymentInfo.wireTransfer.accountNumber}</p>
-          <p><strong>Branch Name:</strong> {NGOData.paymentInfo.wireTransfer.branchName}</p>
-          <p><strong>Bank Name:</strong> {NGOData.paymentInfo.wireTransfer.bankName}</p>
-          <p><strong>Cash:</strong> {NGOData.paymentInfo.cash}</p>
-          <p><strong>Mobile Payment:</strong> {NGOData.paymentInfo.mobilePayment}</p>
-        </details>
-        <details>
-          <summary>Posts</summary>
-          {NgoPosts.length > 0 ? (
-            <ul>
-              {NgoPosts.map((post) => (
-                <li key={post.id}>
-                  <h2>{post.title}</h2>
-                  <p>{post.description}</p>
-                  <p>{post.reachedAmount}/{post.targetedAmount}</p>
-                  <button onClick={() => deletePost(post.id)}>Delete</button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No posts found for this NGO.</p>
-          )}
-        </details>
-      </div>}
-      {/* <NGOOverview ngoId={auth.currentUser?.uid} /> */}
+      {NGOData && (
+        <div>
+          <details>
+            <summary>NGO Information</summary>
+            <p><strong>Name:</strong> {NGOData.name}</p>
+            <p><strong>License No:</strong> {NGOData.licenseNo}</p>
+            <p><strong>About Us:</strong> {NGOData.aboutUs}</p>
+          </details>
+          <details>
+            <summary>Contact Information</summary>
+            <p><strong>Phone:</strong> {NGOData.contactInfo.phone}</p>
+            <p><strong>Email:</strong> {NGOData.contactInfo.email}</p>
+          </details>
+          <details>
+            <summary>Payment Information</summary>
+            <h3>Wire Transfer</h3>
+            <p><strong>Account Number:</strong> {NGOData.paymentInfo.wireTransfer.accountNumber}</p>
+            <p><strong>Branch Name:</strong> {NGOData.paymentInfo.wireTransfer.branchName}</p>
+            <p><strong>Bank Name:</strong> {NGOData.paymentInfo.wireTransfer.bankName}</p>
+            <p><strong>Cash:</strong> {NGOData.paymentInfo.cash}</p>
+            <p><strong>Mobile Payment:</strong> {NGOData.paymentInfo.mobilePayment}</p>
+          </details>
+          <details>
+            <summary>Posts</summary>
+            {NgoPosts.length > 0 ? (
+              <ul>
+                {NgoPosts.map((post) => (
+                  <li key={post.id}>
+                    <h2>{post.title}</h2>
+                    <p>{post.description}</p>
+                    <p>{post.reachedAmount}/{post.targetedAmount}</p>
+                    <button onClick={() => deletePost(post.id)}>🗑️</button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No posts found for this NGO.</p>
+            )}
+          </details>
+        </div>
+      )}
     </div>
   );
 };

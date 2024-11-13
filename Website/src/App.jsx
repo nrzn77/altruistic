@@ -98,9 +98,8 @@ function Layout({ user, userRole, setUserRole }) {
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />
           <Route path="/payment-gateway" element={<PaymentGateway />} />
-          <Route path="/AvailableVolunteer" 
-            element={user && userRole === 'NGO' ? <AvailableVolunteers /> : <Customnavigate to="/login" />} 
-          />
+          
+           
         </Routes>
       </div>
     </>
