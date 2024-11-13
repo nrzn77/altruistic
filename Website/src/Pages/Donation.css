@@ -1,0 +1,75 @@
+.donations-page {
+    font-family: 'Nunito', sans-serif;
+    padding: 20px;
+}
+
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+.post-creator {
+    font-size: 1rem;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.post-creator:hover {
+    color: #0056b3;
+}
+
+.donation-meter {
+    width: 100%;
+    height: 25px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #ff8c00, #ff0000);
+    border: none;
+    appearance: none;
+}
+
+.donate-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.donate-button:hover {
+    background-color: #0056b3;
+}
+
+button:focus {
+    outline: none;
+}

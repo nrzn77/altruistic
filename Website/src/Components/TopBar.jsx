@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdMenu, MdClose } from "react-icons/md";
-import { PiHandCoinsDuotone } from "react-icons/pi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase-config";
 import { signOut } from "firebase/auth";
@@ -47,7 +46,7 @@ export function TopBar({ userRole, setUserRole }) {
 
     return (
         <nav style={menuOpen ? { backgroundColor: "var(--blue)" } : {}} onClick={() => { if (menuOpen) setMenuOpen(false) }}>
-            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><PiHandCoinsDuotone /> ClearAid</h1>
+            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src="./sweood.svg" width="60" height="60"/>ClearAid</h1>
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 {!userRole && <>
                     <Link to="/login">
