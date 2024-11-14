@@ -8,7 +8,7 @@ function VolunteerCard({ volunteer }) {
             <Row className="g-0">
                 <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
                     <Card.Img
-                        src={volunteer.photoURL ? volunteer.photoURL : "https://via.placeholder.com/150"}
+                        src={volunteer.photoURL ? volunteer.photoURL : "/images/ProfileiconD.jpg"}
                         alt="Profile image"
                         className="rounded-circle"
                         style={{ width: '100px', height: '100px', objectFit: 'cover' }}
