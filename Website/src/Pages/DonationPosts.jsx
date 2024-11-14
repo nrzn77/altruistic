@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy, limit, startAfter, where } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
+import PostImage from '../Components/PostImage';
 
 import './Donation.css' // CSS FILE FOR THE DONATION PAGE
 
@@ -126,6 +127,7 @@ const DonationPosts = () => {
                     <div key={post.id} className="post-card">
                         <h3>{post.title}</h3>
                         <h6 className='post-creator' onClick={() => viewNGOOverview(post.createdBy)}>{post.ngoName}</h6>
+                        <PostImage post={post} />
                         <p>{post.description}</p>
                         <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
                         <meter value={post.reachedAmount} min="0" max={post.targetedAmount}

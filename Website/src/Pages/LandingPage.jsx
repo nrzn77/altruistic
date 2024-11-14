@@ -10,7 +10,7 @@ import ICONsign_up from "../assets/LOGOS/sign_up.svg"
 import ICONtrusted_donations from "../assets/LOGOS/trusted_donation.svg"
 import ICONVolunteers from "../assets/LOGOS/Volunteers.svg"
 
-export default function LandingPage({userRole, setUserRole}) {
+export default function LandingPage({ userRole, setUserRole }) {
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries, self) => {
@@ -31,10 +31,13 @@ export default function LandingPage({userRole, setUserRole}) {
   }, [])
   return <>
     <header>
-      <TopBar userRole={userRole} setUserRole={setUserRole}/>
+      <TopBar userRole={userRole} setUserRole={setUserRole} />
       <Canvas />
-      <h1 className="header-title">ClearAid</h1>
-      <div className="header-text">Altruism. Discretion. Transparency.</div>
+      {/* <div> */}
+        <h1 className="header-title">ClearAid</h1>
+        <div className="header-text">Altruism. Discretion. Transparency.</div>
+      {/* </div>
+      <img src="/sweood.svg"/> */}
     </header>
     <section className="section-1">
       <div className="decoration one"></div>
@@ -100,18 +103,18 @@ export default function LandingPage({userRole, setUserRole}) {
       <div className="section-content">
         <h1 className="hidden hidden-default">NGOs!</h1>
         <p className="hidden hidden-default" style={{ transitionDelay: "0.1s" }}>Do you need funds? Is there some cause that needs monetary aid? Post your plight here, and it will be posted for all to see.</p>
-        <Link to="/registerNGO">
+        {userRole != 'volunteer' && <Link to="/registerNGO">
           Register as a NGO
-        </Link>
+        </Link>}
       </div>
     </section>
     <section id="Volunteer" className="section-3 infodumps infodumps-3" style={{ backgroundImage: `url(${ICONVolunteers})` }}>
       <div className="section-content">
         <h1 className="hidden hidden-default">Volunteers!</h1>
         <p className="hidden hidden-default" style={{ transitionDelay: "0.1s" }}>Do you have time on your hands? Do you wish to serve the community with your physical strength or labour? Register an account here, and NGOs can contact you when they need your help!</p>
-        <Link to="/register">
+        {userRole != 'ngo' && <Link to="/register">
           Register as a Volunteer
-        </Link>
+        </Link>}
       </div>
     </section>
 

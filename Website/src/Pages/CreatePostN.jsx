@@ -144,6 +144,7 @@
 
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { db, auth } from '../firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -159,6 +160,7 @@ const NGOPost = () => {
 
   const [message, setMessage] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
+  const [photo, setPhoto] = useState(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -188,6 +190,24 @@ const NGOPost = () => {
       return;
     }
 
+    let photoURL = '';
+
+    if (photo) {
+      const _formData = new FormData();
+      _formData.append('image', photo);
+
+      try {
+        const response = await axios.post('http://localhost:3000/upload', _formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        photoURL = response.data.url;
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+        setMessage("Image could not be uploaded")
+        return
+      }
+    }
+
     if (formData.title && formData.description && formData.cause && formData.targetedAmount) {
       try {
         await addDoc(collection(db, 'NGO_Posts'), {
@@ -197,6 +217,7 @@ const NGOPost = () => {
           createdAt: new Date(),
           createdBy: currentUser.uid,
           ngoEmail: currentUser.email,
+          photoURL
         });
         setMessage('Post created successfully!');
         setFormData({ title: '', description: '', cause: '', targetedAmount: '' });
@@ -274,6 +295,15 @@ const NGOPost = () => {
                 required
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Add Image</Form.Label>
+              <Form.Control
+                type="file"
+                name="photo"
+                onChange={(e) => setPhoto(e.target.files[0])}
+                placeholder="Add an image"
+              />
+            </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100"
               style={{ backgroundColor: 'var(--blue)', color: 'white' }}>
@@ -281,7 +311,7 @@ const NGOPost = () => {
             </Button>
           </Form>
         </Col>
-      </Row>
+      </Row><br />
     </Container>
   );
 };

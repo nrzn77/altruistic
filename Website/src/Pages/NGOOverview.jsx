@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { Card, ListGroup, Row, Col } from 'react-bootstrap';
+import PostImage from '../Components/PostImage';
 
 const NGOOverview = () => {
   const { ngoId } = useParams();
@@ -85,6 +86,7 @@ const NGOOverview = () => {
                 <Card key={post.id} className="mb-3">
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
+                    <PostImage post={post} />
                     <Card.Text>{post.description}</Card.Text>
                     <ListGroup variant="flush">
                       <ListGroup.Item>

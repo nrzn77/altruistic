@@ -8,6 +8,7 @@ import AvailableVolunteers from './AvailableVolunteer';
 import { Card, Button, ListGroup, Row, Col } from 'react-bootstrap';
 import { MdDelete, MdEmail } from 'react-icons/md';
 import { FaPhoneAlt } from "react-icons/fa";
+import PostImage from '../Components/PostImage';
 
 const Dashboard = ({ setUserRole }) => {
   const navigate = useNavigate();
@@ -142,6 +143,7 @@ const Dashboard = ({ setUserRole }) => {
                   <Card key={post.id} className="mb-3">
                     <Card.Body>
                       <Card.Title>{post.title}</Card.Title>
+                      <PostImage post={post} />
                       <Card.Text>{post.description}</Card.Text>
                       <ListGroup variant="flush">
                         <ListGroup.Item>
