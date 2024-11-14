@@ -97,6 +97,22 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
       console.error('Error updating availability:', error);
     }
   };
+  const updateProfile = async (uid, name, area, skills) => {
+    try {
+      const volunteerRef = doc(db, 'volunteers', uid);
+      await updateDoc(volunteerRef, {
+        name, area, skills
+      });
+      setVolunteerData(prev => ({
+        ...prev,
+        name, area, skills
+      }))
+      alert(`Profile updated.`);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Error updating profile');
+    }
+  };
 
   return (
     <div>
@@ -114,14 +130,14 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
               >
                 Overview
               </Nav.Link>
-              {/* <Nav.Link
+              <Nav.Link
                 eventKey="profile"
                 onClick={() => setActiveTab('profile')}
                 style={getNavLinkStyle('profile')}
               >
                 Profile
               </Nav.Link>
-              <Nav.Link
+              {/* <Nav.Link
                 eventKey="enrolled-projects"
                 onClick={() => setActiveTab('enrolled-projects')}
                 style={getNavLinkStyle('enrolled-projects')}
@@ -183,7 +199,7 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
           {/* Main Content Area */}
           <Col md={9}>
             {activeTab === 'overview' && <VolunteerOverview volunteerData={volunteerData} />}
-            {/* {activeTab === 'profile' && <VolunteerProfile />} */}
+            {activeTab === 'profile' && <VolunteerProfile volunteerData={volunteerData} updateProfile={updateProfile} />}
             {/* {activeTab === 'enrolled-projects' && <MyProjects setIsEnrolled={setIsEnrolled} />} */}
             {/* {activeTab === 'availability' && <AvailableProjects />} */}
           </Col>

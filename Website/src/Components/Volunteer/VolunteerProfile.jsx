@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
+import { auth } from '../../firebase-config';
 import { Form, Button, Card } from 'react-bootstrap';
 
-const VolunteerProfile = () => {
-    const [name, setName] = useState('');
-    const [nid, setNid] = useState('');
-    const [skills, setSkills] = useState('');
-    const [experience, setExperience] = useState('');
+const VolunteerProfile = ({volunteerData, updateProfile}) => {
+    const [name, setName] = useState(volunteerData.name);
+    const [area, setArea] = useState(volunteerData.area);
+    const [skills, setSkills] = useState(volunteerData.skills);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Logic to save volunteer profile (e.g., Firestore)
-        alert('Profile saved');
+        updateProfile(auth.currentUser.uid, name, area, skills)
     };
 
     return (
@@ -28,13 +27,13 @@ const VolunteerProfile = () => {
                             required
                         />
                     </Form.Group>
-                    <Form.Group controlId="nid">
-                        <Form.Label>National ID</Form.Label>
+                    <Form.Group controlId="area">
+                        <Form.Label>Area</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter your NID"
-                            value={nid}
-                            onChange={(e) => setNid(e.target.value)}
+                            placeholder="Enter your area"
+                            value={area}
+                            onChange={(e) => setArea(e.target.value)}
                             required
                         />
                     </Form.Group>
@@ -46,17 +45,6 @@ const VolunteerProfile = () => {
                             placeholder="Enter your skills"
                             value={skills}
                             onChange={(e) => setSkills(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="experience">
-                        <Form.Label>Previous Experience</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Describe your previous volunteering experience"
-                            value={experience}
-                            onChange={(e) => setExperience(e.target.value)}
                             required
                         />
                     </Form.Group>
