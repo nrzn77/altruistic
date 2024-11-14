@@ -135,7 +135,7 @@ const DonationPosts = () => {
                             style={{ width: '100%', height: '35px' }}></meter>
                         <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
                         <button type="button" className="btn btn-primary mt-3 w-100"
-                            style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.ids, post.reachedAmount, post.targetedAmount, post.ngoName)}>
+                            style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, post.ngoName)}>
                             Donate Now!
                         </button>
                     </div>
