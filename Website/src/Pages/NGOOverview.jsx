@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { Card, ListGroup, Row, Col } from 'react-bootstrap';
@@ -10,6 +10,7 @@ const NGOOverview = () => {
   const [ngoPosts, setNgoPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (ngoId) {
@@ -60,13 +61,24 @@ const NGOOverview = () => {
     return <p>{error}</p>;
   }
 
+  const goToPayment = (postId, reachedAmount, targetedAmount, ngoName) => {
+    navigate("/payment-gateway", {
+      state: {
+        postId,
+        currentReachedAmount: reachedAmount,
+        targetedAmount,
+        ngoName
+      }
+    });
+  };
+
   return (
     <div>
       {ngoInfo ? (
         <div className='ngo-overview'>
           <h2>{ngoInfo.name}</h2>
           <p>{ngoInfo.aboutUs}</p>
-          <h3>Other Posts</h3>
+          <h3>Posts</h3>
           {ngoPosts.length > 0 ? (
             <div className="ngo-dashboard-tab">
               {ngoPosts.map((post) => (
@@ -79,6 +91,10 @@ const NGOOverview = () => {
                         {post.reachedAmount} / {post.targetedAmount} achieved
                       </ListGroup.Item>
                     </ListGroup>
+                    <button type="button" className="btn btn-primary mt-3 w-100"
+                      style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, ngoInfo.name)}>
+                      Donate Now!
+                    </button>
                   </Card.Body>
                 </Card>
               ))}
