@@ -126,15 +126,16 @@ const DonationPosts = () => {
                 {posts.map((post) => (
                     <div key={post.id} className="post-card">
                         <h3>{post.title}</h3>
+                        <i>{post.cause}</i>
                         <h6 className='post-creator' onClick={() => viewNGOOverview(post.createdBy)}>{post.ngoName}</h6>
                         <PostImage post={post} />
                         <p>{post.description}</p>
                         <p><strong>Targeted Amount:</strong> {post.targetedAmount}</p>
-                        <meter value={post.reachedAmount} min="0" max={post.targetedAmount}
+                        <meter value={post.reachedAmount} min="0" max={post.targetedAmount} low={post.targetedAmount/2}
                             style={{ width: '100%', height: '35px' }}></meter>
                         <p><strong>Reached Amount:</strong> {post.reachedAmount}</p>
                         <button type="button" className="btn btn-primary mt-3 w-100"
-                            style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, post.ngoName)}>
+                            style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.ids, post.reachedAmount, post.targetedAmount, post.ngoName)}>
                             Donate Now!
                         </button>
                     </div>
