@@ -173,7 +173,7 @@ const PaymentGateway = () => {
     setShowDownloadButton(true);
 
     // Redirect after 4 seconds
-    setTimeout(() => navigate('/donation-posts'), 4000);
+    // setTimeout(() => navigate('/donation-posts'), 4000);
   };
 
   // Generate PDF invoice

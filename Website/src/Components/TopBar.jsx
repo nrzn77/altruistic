@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth";
 import "./TopBar.css";
 
 export function TopBar({ userRole, setUserRole }) {
-    const location = useLocation();
+    // const location = useLocation();
     const searchBarRef = useRef(null);
     // if(location.pathname === "/") return;
     const [menuOpen, setMenuOpen] = useState(false);
@@ -17,14 +17,14 @@ export function TopBar({ userRole, setUserRole }) {
 
     const logout = () => {
         signOut(auth)
-          .then(() => {
-            setUserRole(null);
-            console.log("User logged out")
-          })
-          .catch((error) => {
-            console.error("Error logging out: ", error);
-          });
-      };
+            .then(() => {
+                setUserRole(null);
+                console.log("User logged out")
+            })
+            .catch((error) => {
+                console.error("Error logging out: ", error);
+            });
+    };
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -46,7 +46,9 @@ export function TopBar({ userRole, setUserRole }) {
 
     return (
         <nav style={menuOpen ? { backgroundColor: "var(--blue)" } : {}} onClick={() => { if (menuOpen) setMenuOpen(false) }}>
-            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src="./sweood.svg" width="60" height="60"/>ClearAid</h1>
+
+            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src="./sweood.svg" className="main-logo" /><span>ClearAid</span></h1>
+
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 {!userRole && <>
                     <Link to="/login">
@@ -74,7 +76,7 @@ export function TopBar({ userRole, setUserRole }) {
                     </Link>
                 }
                 {
-                    userRole && <a onClick={logout} style={{cursor: "pointer"}}>
+                    userRole && <a onClick={logout} style={{ cursor: "pointer" }}>
                         Logout
                     </a>
                 }

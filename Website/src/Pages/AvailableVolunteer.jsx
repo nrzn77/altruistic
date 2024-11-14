@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import VolunteerCard from '../Components/NGO/VolunteerCard.jsx';
 
 const AvailableVolunteers = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -9,9 +10,9 @@ const AvailableVolunteers = () => {
   useEffect(() => {
     const fetchAvailableVolunteers = async () => {
       setLoading(true);
-      
+
       // Query to fetch volunteers where availability is 'available'
-      const q = query(collection(db, 'Volunteers'), where('availabilityStatus', '==', 'available'));
+      const q = query(collection(db, 'volunteers'), where('availability', '==', 'available'));
       const querySnapshot = await getDocs(q);
 
       // Map through the results and set the volunteers state
@@ -21,6 +22,7 @@ const AvailableVolunteers = () => {
       }));
 
       setVolunteers(volunteersList);
+      console.log(volunteersList)
       setLoading(false);
     };
 
@@ -34,13 +36,10 @@ const AvailableVolunteers = () => {
       {loading ? (
         <p>Loading volunteers...</p>
       ) : volunteers.length > 0 ? (
-        <div className="volunteers-container">
+        <div className="volunteers-container ngo-dashboard-tab">
           {volunteers.map((volunteer) => (
             <div key={volunteer.id} className="volunteer-card">
-              <h3>{volunteer.name}</h3>
-              <p><strong>Gender:</strong> {volunteer.gender}</p>
-              <p><strong>Skills:</strong> {volunteer.skills.join(', ')}</p>
-              <p><strong>Area:</strong> {volunteer.area}</p>
+              <VolunteerCard volunteer={volunteer} />
             </div>
           ))}
         </div>

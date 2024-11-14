@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import { Card, ListGroup, Row, Col } from 'react-bootstrap';
 
 const NGOOverview = () => {
-  const {ngoId} = useParams();
+  const { ngoId } = useParams();
   const [ngoInfo, setNgoInfo] = useState(null);
   const [ngoPosts, setNgoPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,20 +63,26 @@ const NGOOverview = () => {
   return (
     <div>
       {ngoInfo ? (
-        <div>
+        <div className='ngo-overview'>
           <h2>{ngoInfo.name}</h2>
           <p>{ngoInfo.aboutUs}</p>
           <h3>Other Posts</h3>
           {ngoPosts.length > 0 ? (
-            <ul>
+            <div className="ngo-dashboard-tab">
               {ngoPosts.map((post) => (
-                <li key={post.id}>
-                  <h2>{post.title}</h2>
-                  <p>{post.description}</p>
-                  <p>{post.reachedAmount}/{post.targetedAmount}</p>
-                </li>
+                <Card key={post.id} className="mb-3">
+                  <Card.Body>
+                    <Card.Title>{post.title}</Card.Title>
+                    <Card.Text>{post.description}</Card.Text>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item>
+                        {post.reachedAmount} / {post.targetedAmount} achieved
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Card.Body>
+                </Card>
               ))}
-            </ul>
+            </div>
           ) : (
             <p>No posts found for this NGO.</p>
           )}

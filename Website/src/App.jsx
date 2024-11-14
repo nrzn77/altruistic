@@ -12,8 +12,7 @@ import DonationPosts from './Pages/DonationPosts';
 import DashboardVolun from './Pages/DashboardVolun';
 import LoginVO from './Pages/LoginVO';
 import NGOOverview from './Pages/NGOOverview.jsx';
-import PaymentGateway from './Pages/PaymentGateway';
-import AvailableVolunteers from './Pages/AvailableVolunteer';  // one more import & we will be done lol
+import PaymentGateway from './Pages/PaymentGateway'; // one more import & we will be done lol
 
 
 //ar koto import korbo bhai?
@@ -56,6 +55,7 @@ function App() {
   }, [userRole])
 
   useEffect(()=>{
+    console.log(user)
     if(!userRole){
       logout();
       console.log('Logged Out')

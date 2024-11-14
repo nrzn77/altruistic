@@ -18,8 +18,8 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
   const [isEnrolled, setIsEnrolled] = useState(false); // Track enrollment status
   const [volunteerData, setVolunteerData] = useState({
     photoURL: "./images/profile.png",
-    name: "John Doe",
-    skills: "Project Management, Fundraising",
+    name: "name",
+    skills: "skills",
     availability: "available"
   });
 

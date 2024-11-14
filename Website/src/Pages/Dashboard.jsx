@@ -4,6 +4,10 @@ import { signOut } from 'firebase/auth';
 import { db } from '../firebase-config';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { useNavigate, Link } from 'react-router-dom';
+import AvailableVolunteers from './AvailableVolunteer';
+import { Card, Button, ListGroup, Row, Col } from 'react-bootstrap';
+import { MdDelete, MdEmail } from 'react-icons/md';
+import { FaPhoneAlt } from "react-icons/fa";
 
 const Dashboard = ({ setUserRole }) => {
   const navigate = useNavigate();
@@ -80,51 +84,88 @@ const Dashboard = ({ setUserRole }) => {
   };
 
   return (
-    <div>
+    <div className='ngo-dashboard'>
       <h1>Welcome to Your Dashboard!</h1>
       <p>You are logged in as {auth.currentUser?.email}</p>
-      <button onClick={handleLogout}>Logout</button>
-      <Link to="/CreatePost">
-        <button>Create a post asking for money</button>
-      </Link>
+
+      <Row className="gy-2">
+        <Col xs={12} sm="auto">
+          <Link to="/CreatePost">
+            <Button variant="primary" className="w-100">
+              Create a post asking for money
+            </Button>
+          </Link>
+        </Col>
+        <Col xs={12} sm="auto">
+          <Button variant="secondary" onClick={handleLogout} className="w-100">
+            Logout
+          </Button>
+        </Col>
+      </Row>
+
       {NGOData && (
         <div>
+          <Card className="my-3">
+            <Card.Body>
+              <Card.Title>{NGOData.name}</Card.Title>
+              <Card.Text>
+                <strong>License No:</strong> {NGOData.licenseNo}
+              </Card.Text>
+              <Card.Text>
+                <strong>About Us:</strong> {NGOData.aboutUs}
+              </Card.Text>
+              <Card.Text><FaPhoneAlt /> {NGOData.contactInfo.phone}</Card.Text>
+              <Card.Text><MdEmail /> {NGOData.contactInfo.email}</Card.Text>
+            </Card.Body>
+          </Card>
+
+
+          <p><strong>Cash Transfer Address:</strong> {NGOData.paymentInfo.cash}</p>
+          <p><strong>Mobile Payment:</strong> {NGOData.paymentInfo.mobilePayment}</p>
           <details>
-            <summary>NGO Information</summary>
-            <p><strong>Name:</strong> {NGOData.name}</p>
-            <p><strong>License No:</strong> {NGOData.licenseNo}</p>
-            <p><strong>About Us:</strong> {NGOData.aboutUs}</p>
+            <summary>
+              <strong>Bank Information</strong>
+            </summary>
+            <p>Account Number: {NGOData.paymentInfo.wireTransfer.accountNumber}</p>
+            <p>Branch Name: {NGOData.paymentInfo.wireTransfer.branchName}</p>
+            <p>Bank Name: {NGOData.paymentInfo.wireTransfer.bankName}</p>
           </details>
-          <details>
-            <summary>Contact Information</summary>
-            <p><strong>Phone:</strong> {NGOData.contactInfo.phone}</p>
-            <p><strong>Email:</strong> {NGOData.contactInfo.email}</p>
-          </details>
-          <details>
-            <summary>Payment Information</summary>
-            <h3>Wire Transfer</h3>
-            <p><strong>Account Number:</strong> {NGOData.paymentInfo.wireTransfer.accountNumber}</p>
-            <p><strong>Branch Name:</strong> {NGOData.paymentInfo.wireTransfer.branchName}</p>
-            <p><strong>Bank Name:</strong> {NGOData.paymentInfo.wireTransfer.bankName}</p>
-            <p><strong>Cash:</strong> {NGOData.paymentInfo.cash}</p>
-            <p><strong>Mobile Payment:</strong> {NGOData.paymentInfo.mobilePayment}</p>
-          </details>
+
+          <hr />
+
           <details>
             <summary>Posts</summary>
+            <h2>Posts</h2>
             {NgoPosts.length > 0 ? (
-              <ul>
+              <div className="ngo-dashboard-tab">
                 {NgoPosts.map((post) => (
-                  <li key={post.id}>
-                    <h2>{post.title}</h2>
-                    <p>{post.description}</p>
-                    <p>{post.reachedAmount}/{post.targetedAmount}</p>
-                    <button onClick={() => deletePost(post.id)}>🗑️</button>
-                  </li>
+                  <Card key={post.id} className="mb-3">
+                    <Card.Body>
+                      <Card.Title>{post.title}</Card.Title>
+                      <Card.Text>{post.description}</Card.Text>
+                      <ListGroup variant="flush">
+                        <ListGroup.Item>
+                          {post.reachedAmount} / {post.targetedAmount} achieved
+                        </ListGroup.Item>
+                      </ListGroup>
+                      <Button
+                        variant="danger"
+                        onClick={() => deletePost(post.id)}
+                        className="mt-2"
+                      >
+                        <MdDelete /> Delete
+                      </Button>
+                    </Card.Body>
+                  </Card>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p>No posts found for this NGO.</p>
             )}
+          </details>
+          <details>
+            <summary>Volunteers</summary>
+            <AvailableVolunteers />
           </details>
         </div>
       )}

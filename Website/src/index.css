@@ -354,3 +354,19 @@ meter {
   /* border-radius: 2vmin;
   padding: 4vmin; */
 }
+
+.ngo-dashboard-tab{
+  max-width: 800px;
+  margin: 0 auto;
+}
+.ngo-dashboard h2{
+  text-align: center;
+}
+.ngo-dashboard{
+  padding: 20px;
+}
+
+
+.ngo-overview{
+  padding: 20px;
+}
