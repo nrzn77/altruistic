@@ -73,3 +73,15 @@ h3 {
 button:focus {
     outline: none;
 }
+
+
+.filter-search-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.category-filter,
+.ngo-search {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
