@@ -15,6 +15,9 @@ import NGOOverview from './Pages/NGOOverview.jsx';
 import PaymentGateway from './Pages/PaymentGateway'; // one more import & we will be done lol
 
 
+import UpdatePost from './Pages/UpdatePost.jsx';
+import PostUpdates from './Pages/PostUpdates_Show.jsx';
+
 //ar koto import korbo bhai?
 
 
@@ -25,6 +28,8 @@ import { auth } from './firebase-config'; // Import your Firebase configuration
 import 'bootstrap/dist/css/bootstrap.min.css'; // For react bootstrap
 
 import { getRole, setRole } from './Components/role.js';
+
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -98,7 +103,10 @@ function Layout({ user, userRole, setUserRole }) {
           <Route path="/donation-posts" element={<DonationPosts />} />
           <Route path="/ngo/:ngoId" element={<NGOOverview />} />
           <Route path="/payment-gateway" element={<PaymentGateway />} />
+
+          <Route path="/update-post/:id" element={<UpdatePost />} />
           
+          <Route path="/updates/:id" element={<PostUpdates />} /> {/* Route for updates */}
            
         </Routes>
       </div>

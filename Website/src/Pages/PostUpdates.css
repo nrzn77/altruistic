@@ -1,0 +1,74 @@
+/* Center the updates container, ensuring the heading is above it */
+.updates-page {
+    display: flex;
+    justify-content: flex-start;  /* Align items to the top of the page */
+    align-items: center;          /* Center content vertically */
+    height: 100vh;                /* Full viewport height */
+    flex-direction: column;       /* Stack content vertically */
+    padding: 20px;
+}
+
+/* Styling for the updates container */
+.updates-container {
+    display: flex;
+    justify-content: center;      /* Horizontally center the card */
+    flex-direction: column;       /* Stack the content vertically */
+    align-items: center;          /* Vertically center the card */
+    width: 100%;                  /* Full width of the page */
+    max-width: 800px;             /* Optional max width for the content */
+    margin-top: 20px;             /* Add space between heading and content */
+}
+
+/* Styling for the update cards */
+.update-card {
+    width: 100%;
+    max-width: 600px;             /* Max width for larger cards */
+    margin-bottom: 20px;          /* Space between cards */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 15px;                /* Padding inside the card for spacing */
+}
+
+/* Card hover effect */
+.update-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card footer styling */
+.card-footer {
+    background-color: #f8f9fa;
+}
+
+.card-footer small {
+    font-size: 0.9rem;
+}
+
+/* Image styling */
+.card-img-top {
+    width: 100%; /* Make the image take up the full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 300px; /* Increased max-height to allow larger images */
+    object-fit: cover; /* Ensure the image covers the space without distortion */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Alert styling */
+.alert-info {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Spinner container styling */
+.loading-container {
+    display: flex;
+    justify-content: center;  /* Center the spinner horizontally */
+    align-items: center;      /* Center the spinner vertically */
+    flex-direction: column;   /* Stack the spinner and text */
+}

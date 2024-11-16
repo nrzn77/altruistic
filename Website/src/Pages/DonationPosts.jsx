@@ -153,8 +153,7 @@
 
 // PREVIOUS CODES 
 
-
-// NEW CODES FOR SEARCH AND CATEGORY
+//NEW CODES FOR SEARCH AND CATEGORY
 
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy, limit, startAfter, where } from 'firebase/firestore';
@@ -323,6 +322,15 @@ const DonationPosts = () => {
                         >
                             Donate Now!
                         </button>
+                        <button
+                            type="button"
+                            className="btn btn-secondary mt-3 w-100"
+                            style={{ backgroundColor: '#a1ddec', color: 'black' }}
+                            onClick={() => navigate(`/updates/${post.id}`)}
+                        >
+                            Updates
+                        </button>
+
                     </div>
                 ))}
             </div>

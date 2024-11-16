@@ -157,6 +157,13 @@ const Dashboard = ({ setUserRole }) => {
                       >
                         <MdDelete /> Delete
                       </Button>
+                      <Button
+                        variant="warning"
+                        onClick={() => navigate(`/update-post/${post.id}`)}
+                        className="mt-2 ms-2"
+                      >
+                        Update
+                      </Button>
                     </Card.Body>
                   </Card>
                 ))}
