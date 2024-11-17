@@ -13,8 +13,20 @@ const Login = () => {
     e.preventDefault();
     const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/admin-dashboard");
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const adminUid = "tISBnL9Rb4RLUnXptrPNfbIYaX43";
+
+      if (user.uid === adminUid) {
+        navigate("/admin-dashboard");
+      } else {
+        setError("You are not authorized to access this page.");
+      }
     } catch (err) {
       setError("Invalid email or password. Please try again.");
     }
