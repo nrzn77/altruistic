@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./AdminDash.css";
 
 const AdminDash = () => {
   const navigate = useNavigate();
@@ -9,25 +10,11 @@ const AdminDash = () => {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", padding: "20px" }}>
-      <button
-        onClick={handleLogout}
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "20px",
-          padding: "10px 20px",
-          backgroundColor: "#f44336",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
+    <div className="admin-container">
+      <button onClick={handleLogout} className="logout-button">
         Logout
       </button>
-
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <div className="admin-content">
         <h1>Admin Dashboard</h1>
       </div>
     </div>

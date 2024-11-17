@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import "./AdminLogin.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,14 +21,7 @@ const Login = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "500px",
-        margin: "auto",
-        padding: "50px",
-        textAlign: "center",
-      }}
-    >
+    <div className="login-container">
       <h2>Admin Login</h2>
       <form onSubmit={handleLogin}>
         <div>
@@ -37,7 +31,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
+            className="login-input"
           />
         </div>
         <div>
@@ -47,14 +41,14 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
+            className="login-input"
           />
         </div>
-        <button type="submit" style={{ padding: "10px", width: "100%" }}>
+        <button type="submit" className="login-button">
           Login
         </button>
       </form>
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+      {error && <p className="login-error">{error}</p>}
     </div>
   );
 };
