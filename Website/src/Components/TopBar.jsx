@@ -38,6 +38,16 @@ export function TopBar({ userRole, setUserRole }) {
         setSearchOpen(!searchOpen);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            const searchTerm = searchBarRef.current.value
+            if(searchTerm === "") return
+            setSearchOpen(false);
+            console.log(searchTerm)
+            navigate('/search/' + encodeURIComponent(searchTerm))
+        }
+    }
+
     useEffect(() => {
         if (searchOpen) {
             searchBarRef.current.focus();
@@ -95,7 +105,10 @@ export function TopBar({ userRole, setUserRole }) {
                     )}
                 </div> */}
             </div>
-            {searchOpen && <input type="text" className="search-input" placeholder="Search..." ref={searchBarRef} />}
+            {searchOpen &&
+                <input type="text" className="search-input" placeholder="Search..." ref={searchBarRef}
+                    onKeyDown={e=>handleKeyDown(e)} />
+            }
             <div>
                 <div className={searchOpen ? ' searchmode' : 'hamburger'} onClick={toggleMenu}>
                     <MdMenu />

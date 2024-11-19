@@ -20,6 +20,7 @@ import LoginVO from "./Pages/LoginVO";
 import NGOOverview from "./Pages/NGOOverview.jsx";
 import PaymentGateway from "./Pages/PaymentGateway"; // one more import & we will be done lol
 import AdminLogin from "./Pages/AdminLogin.jsx";
+import SearchEngine from "./Pages/SearchPage.jsx";
 
 import UpdatePost from './Pages/UpdatePost.jsx';
 import PostUpdates from './Pages/PostUpdates_Show.jsx';
@@ -35,6 +36,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // For react bootstrap
 
 import { getRole, setRole } from "./Components/role.js";
 import AdminDash from "./Pages/AdminDash.jsx";
+// import SearchEngine from "./Pages/SearchPage.jsx";
 
 
 
@@ -181,6 +183,7 @@ function Layout({ user, userRole, setUserRole }) {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin-dashboard" element={<AdminDash />} />
           <Route path="/Statistics" element={<Statistics/>}/>
+          <Route path="/search/:searchTerm" element={<SearchEngine/>}/>
         </Routes>
       </div>
     </>
