@@ -94,8 +94,16 @@ const LoginVO = ({setUserRole}) => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Login Page for Volunteers</h2>
+    <div className="container mt-3">
+      <p className="text-center"
+        style={
+          {
+            fontSize: '60px',
+            fontWeight: 'bold',
+            marginBottom: '1px'
+          }
+        }>Login</p>
+      <h5 className="text-center mb-3">as Volunteers</h5>
       
       <div className="row justify-content-center">
         <div className="col-md-6">
@@ -113,7 +121,7 @@ const LoginVO = ({setUserRole}) => {
               className="btn w-100" 
               style={{ backgroundColor: 'var(--blue)', color: 'white' }}
             >
-              Login with Email
+              Login
             </button>
           </form>
 
