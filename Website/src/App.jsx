@@ -23,6 +23,7 @@ import AdminLogin from "./Pages/AdminLogin.jsx";
 
 import UpdatePost from './Pages/UpdatePost.jsx';
 import PostUpdates from './Pages/PostUpdates_Show.jsx';
+import Statistics from './Pages/Statistics.jsx';
 
 //ar koto import korbo bhai?
 
@@ -179,6 +180,7 @@ function Layout({ user, userRole, setUserRole }) {
            
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin-dashboard" element={<AdminDash />} />
+          <Route path="/Statistics" element={<Statistics/>}/>
         </Routes>
       </div>
     </>
