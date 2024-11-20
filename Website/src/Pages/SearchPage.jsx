@@ -2,6 +2,7 @@
 import { useParams } from "react-router-dom";import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import React, { useState, useEffect } from 'react';
+import DonateButton from "../Components/DonateButton";
 
 
 
@@ -79,6 +80,7 @@ const SearchEngine = () => {
                     <h2>{post.title}</h2>
                     <p>{post.description}</p>
                     <p>{post.reachedAmount}/{post.targetedAmount}</p>
+                    <DonateButton post={post} />
                   </li>
                 ))}
               </ul>
