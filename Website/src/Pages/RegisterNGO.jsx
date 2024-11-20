@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase-config';
 
 const RegisterNGO = ({ setUserRole }) => {
+  const [photo, setPhoto] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     aboutUs: '',
@@ -38,17 +40,17 @@ const RegisterNGO = ({ setUserRole }) => {
         phone: value,
         paymentInfo: {
           ...formData.paymentInfo,
-          mobilePayment: value, 
+          mobilePayment: value,
         },
       });
-    } 
+    }
     else if (name === 'email' && useSameEmailForUsername) {
       setFormData({
         ...formData,
         email: value,
-        username: value, 
+        username: value,
       });
-    } 
+    }
     else {
       setFormData({
         ...formData,
@@ -91,7 +93,7 @@ const RegisterNGO = ({ setUserRole }) => {
         ...prevData,
         paymentInfo: {
           ...prevData.paymentInfo,
-          mobilePayment: '', 
+          mobilePayment: '',
         },
       }));
     } else {
@@ -99,7 +101,7 @@ const RegisterNGO = ({ setUserRole }) => {
         ...prevData,
         paymentInfo: {
           ...prevData.paymentInfo,
-          mobilePayment: prevData.phone, 
+          mobilePayment: prevData.phone,
         },
       }));
     }
@@ -120,11 +122,11 @@ const RegisterNGO = ({ setUserRole }) => {
       }));
     }
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/;
     if (!emailRegex.test(formData.email)) {
       alert("Invalid email address");
@@ -136,7 +138,7 @@ const RegisterNGO = ({ setUserRole }) => {
       alert("Invalid phone number");
       return;
     }
-  
+
 
     if (
       !useSameNumberForPayment &&
@@ -145,12 +147,36 @@ const RegisterNGO = ({ setUserRole }) => {
       alert("Invalid mobile payment number");
       return;
     }
-  
+
     if (formData.password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-  
+
+    if (!photo) {
+      alert("Submit a picture of your license");
+      return;
+    }
+
+    let photoURL;
+
+    if (photo) {
+      const formData = new FormData();
+      formData.append('image', photo);
+      console.log(photo)
+
+      try {
+        const response = await axios.post('http://localhost:3000/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        photoURL = response.data.url;
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+        alert("Error uploading the image");
+        return;
+      }
+    }
+
     try {
       setUserRole("ngo");
       const userCredential = await createUserWithEmailAndPassword(
@@ -159,7 +185,7 @@ const RegisterNGO = ({ setUserRole }) => {
         formData.password
       );
       const user = userCredential.user;
-  
+
       await addDoc(collection(db, "NGOs"), {
         name: formData.name,
         aboutUs: formData.aboutUs,
@@ -171,8 +197,10 @@ const RegisterNGO = ({ setUserRole }) => {
         paymentInfo: formData.paymentInfo,
         userId: user.uid,
         role: "NGO",
+        verified_status: false,
+        photoURL
       });
-  
+
       alert("NGO registration complete!");
     } catch (error) {
       setUserRole(null);
@@ -180,7 +208,7 @@ const RegisterNGO = ({ setUserRole }) => {
       alert("Error registering NGO, please try again.");
     }
   };
-  
+
 
   const isPasswordMatching =
     formData.password && confirmPassword === formData.password;
@@ -190,16 +218,16 @@ const RegisterNGO = ({ setUserRole }) => {
     formData.paymentInfo.mobilePayment &&
     /^(013|014|015|016|017|018|019)\d{8}$/.test(formData.paymentInfo.mobilePayment);
 
-    const isUserNameValid = 
+  const isUserNameValid =
     !useSameEmailForUsername &&
-      formData.username && 
-      /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username);
+    formData.username &&
+    /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username);
 
 
   return (
-    <Container className="mt-4" style={{ paddingBottom: '50px'}}>
-      <h1 className="text-center mb-4" style={{color: '#211940'}}>NGO Registration</h1>
-      <Form onSubmit={handleSubmit} className="border p-4 rounded-shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px'}}>
+    <Container className="mt-4" style={{ paddingBottom: '50px' }}>
+      <h1 className="text-center mb-4" style={{ color: '#211940' }}>NGO Registration</h1>
+      <Form onSubmit={handleSubmit} className="border p-4 rounded-shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px' }}>
         {/* <h2 className="mb-4 text-center" style={{color: '#211940'}}>Register Your NGO</h2> */}
 
         <Row className="mb-3">
@@ -241,31 +269,43 @@ const RegisterNGO = ({ setUserRole }) => {
           </Form.Group>
         </Row>
 
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="formLicenseImage">
+            <Form.Label>License Image</Form.Label>
+            <Form.Control
+              type="file"
+              name="licenseImage"
+              onChange={e => setPhoto(e.target.files[0])}
+              required
+            />
+          </Form.Group>
+        </Row>
+
         <h3>Contact Info</h3>
         <Row className="mb-3">
           <Form.Group as={Col} sm={12} md={6} controlId="formEmail">
-           <Form.Label>Email</Form.Label>
+            <Form.Label>Email</Form.Label>
             <Form.Control
-             type="email"
-             name="email"
-             value={formData.email}
-             onChange={handleInputChange}
-             required
-             style={{
-               borderColor:
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              style={{
+                borderColor:
                   !formData.email
-                   ? '#ced4da'
-                   : /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email)
-                   ? 'green'
-                   : 'red',
+                    ? '#ced4da'
+                    : /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email)
+                      ? 'green'
+                      : 'red',
               }}
             />
             {formData.email &&
-             !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email) && (
-              <Form.Text style={{ color: 'red' }}>
-                Invalid Email
-          </Form.Text>
-        )}
+              !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email) && (
+                <Form.Text style={{ color: 'red' }}>
+                  Invalid Email
+                </Form.Text>
+              )}
           </Form.Group>
 
           <Form.Group as={Col} sm={12} md={6} controlId="formPhone">
@@ -281,16 +321,16 @@ const RegisterNGO = ({ setUserRole }) => {
                   !formData.phone
                     ? '#ced4da'
                     : /^(013|014|015|016|017|018|019)\d{8}$/.test(formData.phone)
-                    ? 'green'
-                    : 'red',
+                      ? 'green'
+                      : 'red',
               }}
             />
             {formData.phone &&
-            !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.phone) && (
-             <Form.Text style={{ color: 'red' }}>
-                Invalid phone number
-          </Form.Text>
-        )}
+              !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.phone) && (
+                <Form.Text style={{ color: 'red' }}>
+                  Invalid phone number
+                </Form.Text>
+              )}
           </Form.Group>
         </Row>
 
@@ -316,11 +356,11 @@ const RegisterNGO = ({ setUserRole }) => {
               disabled={useSameNumberForPayment}
               style={{
                 borderColor:
-                !formData.paymentInfo.mobilePayment || useSameNumberForPayment
+                  !formData.paymentInfo.mobilePayment || useSameNumberForPayment
                     ? '#ced4da'
-                  :isMobilePaymentValid
-                    ? 'green'
-                    : 'red',
+                    : isMobilePaymentValid
+                      ? 'green'
+                      : 'red',
               }}
             />
             <Form.Check
@@ -330,12 +370,12 @@ const RegisterNGO = ({ setUserRole }) => {
               onChange={handleCheckboxChange}
             />
 
-          {formData.paymentInfo.mobilePayment &&
-        !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.paymentInfo.mobilePayment) && (
-          <Form.Text style={{ color: 'red' }}>
-            Invalid phone number
-          </Form.Text>
-        )}
+            {formData.paymentInfo.mobilePayment &&
+              !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.paymentInfo.mobilePayment) && (
+                <Form.Text style={{ color: 'red' }}>
+                  Invalid phone number
+                </Form.Text>
+              )}
           </Form.Group>
         </Row>
 
@@ -375,38 +415,38 @@ const RegisterNGO = ({ setUserRole }) => {
         <h3>Login Credentials</h3>
 
         <Row className="mb-3">
-        <Form.Group as={Col} controlId="formUsername">
-        <Form.Label>Username (Email)</Form.Label>
-        <Form.Control
-          type="email"
-         name="username"
-          value={formData.username}
-          onChange={handleInputChange}
-          required
-          disabled={useSameEmailForUsername} 
-          style={{
-            borderColor:
-            !formData.username || useSameEmailForUsername
-                ? '#ced4da'
-              :isUserNameValid
-                ? 'green'
-                : 'red',
-          }}
-        />
-        <Form.Check
-          type="checkbox"
-          label="Use same email as username"
-          checked={useSameEmailForUsername}
-          onChange={handleUsernameCheckboxChange}
-        />
-       {formData.username &&
-        !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username) && (
-          <Form.Text style={{ color: 'red' }}>
-            Invalid Email
-          </Form.Text>
-        )}
-      </Form.Group>
-    </Row>
+          <Form.Group as={Col} controlId="formUsername">
+            <Form.Label>Username (Email)</Form.Label>
+            <Form.Control
+              type="email"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+              disabled={useSameEmailForUsername}
+              style={{
+                borderColor:
+                  !formData.username || useSameEmailForUsername
+                    ? '#ced4da'
+                    : isUserNameValid
+                      ? 'green'
+                      : 'red',
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Use same email as username"
+              checked={useSameEmailForUsername}
+              onChange={handleUsernameCheckboxChange}
+            />
+            {formData.username &&
+              !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username) && (
+                <Form.Text style={{ color: 'red' }}>
+                  Invalid Email
+                </Form.Text>
+              )}
+          </Form.Group>
+        </Row>
 
         <Row className="mb-3">
           <Form.Group as={Col} sm={12} md={6} controlId="formPassword">
@@ -420,14 +460,14 @@ const RegisterNGO = ({ setUserRole }) => {
             />
             <Form.Text
               style={{
-                  color: !formData.password || formData.password.length>=6 ? 'transparent' : 'red',
+                color: !formData.password || formData.password.length >= 6 ? 'transparent' : 'red',
               }}
             >
-              Password should consist atleast 6 characters 
-          </Form.Text>
+              Password should consist atleast 6 characters
+            </Form.Text>
           </Form.Group>
 
-          
+
 
           <Form.Group as={Col} sm={12} md={6} controlId="formConfirmPassword">
             <Form.Label>Confirm Password</Form.Label>
@@ -441,17 +481,17 @@ const RegisterNGO = ({ setUserRole }) => {
                 borderColor: !formData.password
                   ? '#ced4da'
                   : isPasswordMatching
-                  ? 'green'
-                  : 'red',
+                    ? 'green'
+                    : 'red',
               }}
             />
             <Form.Text
               style={{
-                  color: !formData.password || isPasswordMatching ? 'transparent' : 'red',
+                color: !formData.password || isPasswordMatching ? 'transparent' : 'red',
               }}
             >
               Password does not match
-          </Form.Text>
+            </Form.Text>
           </Form.Group>
         </Row>
 
