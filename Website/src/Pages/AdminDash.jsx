@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import {collection,getDocs,query,where,doc,updateDoc,} from "firebase/firestore";
+import { auth} from "../firebase-config";
+import { signOut } from "firebase/auth";
+
 import { db } from "../firebase-config";
+
 import "./AdminDash.css";
 
 const AdminDash = () => {
@@ -16,10 +13,7 @@ const AdminDash = () => {
   const [ngos, setNgos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    navigate("/admin");
-  };
-
+  
   const fetchNgos = async () => {
     try {
       const ngoQuery = query(
@@ -49,6 +43,17 @@ const AdminDash = () => {
       console.error("Error approving NGO:", error);
       alert("Error approving NGO. Please try again.");
     }
+  };
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        
+        navigate('/login'); 
+      })
+      .catch((error) => {
+        console.error('Error logging out: ', error);
+      });
   };
 
   useEffect(() => {

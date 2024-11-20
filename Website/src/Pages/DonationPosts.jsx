@@ -13,6 +13,7 @@ const DonationPosts = () => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sidePanelVisible, setSidePanelVisible] = useState(false);
+    const [sortOrder, setSortOrder] = useState('');
     const navigate = useNavigate();
 
     const toggleSidePanel = () => {
@@ -33,9 +34,6 @@ const DonationPosts = () => {
         const ngoSnapshots = await getDocs(q);
         return ngoSnapshots.docs[0] ? ngoSnapshots.docs[0].data() : null;
     };
-
-    const [sortOrder, setSortOrder] = useState('');
-
 
     const fetchPosts = async (isInitialLoad = false) => {
         setLoading(true);
@@ -98,6 +96,13 @@ const DonationPosts = () => {
             }
         }
 
+        // Sort fetched posts based on the selected sort order
+        if (sortOrder === 'High to Low') {
+            allPosts.sort((a, b) => b.reachedAmount - a.reachedAmount);
+        } else if (sortOrder === 'Low to High') {
+            allPosts.sort((a, b) => a.reachedAmount - b.reachedAmount);
+        }
+
         if (isInitialLoad) {
             setPosts(allPosts);
         } else {
@@ -113,6 +118,17 @@ const DonationPosts = () => {
     useEffect(() => {
         fetchPosts(true);
     }, [selectedCategories]);
+
+    // Dynamically sort posts when sort order changes
+    useEffect(() => {
+        const sortedPosts = [...posts];
+        if (sortOrder === 'High to Low') {
+            sortedPosts.sort((a, b) => b.reachedAmount - a.reachedAmount);
+        } else if (sortOrder === 'Low to High') {
+            sortedPosts.sort((a, b) => a.reachedAmount - b.reachedAmount);
+        }
+        setPosts(sortedPosts);
+    }, [sortOrder]);
 
     const viewNGOOverview = (ngoId) => {
         navigate('/ngo/' + ngoId);
@@ -176,20 +192,18 @@ const DonationPosts = () => {
                         ))}
                     </div>
                 </div>
+
                 <select
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
                     className="category-filter"
                 >
-                <option value="" disabled>
-                    Sort by
-                </option>
-                <option value="High to Low">Maximum to least donation</option>
-                <option value="low to high">Least to Maximum donation</option>
-            </select>
-
-            
-
+                    <option value="" disabled>
+                        Sort by
+                    </option>
+                    <option value="High to Low">Maximum to least donation</option>
+                    <option value="Low to High">Least to Maximum donation</option>
+                </select>
             </div>
 
             <div className="posts-container">
