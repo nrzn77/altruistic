@@ -86,6 +86,7 @@ import { useParams } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { Alert, Card, Spinner } from 'react-bootstrap';
+import DonateButton from '../Components/DonateButton';
 import './PostUpdates.css'; // CSS file for the updates page
 
 const PostUpdates = () => {

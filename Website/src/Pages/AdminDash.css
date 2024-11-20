@@ -2,21 +2,153 @@
   position: relative;
   min-height: 100vh;
   padding: 20px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 .logout-button {
   position: absolute;
   top: 10px;
   right: 20px;
-  padding: 10px 20px;
+  padding: 8px 15px;
   background-color: #f44336;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .admin-content {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 40px;
+  padding: 10px;
+}
+
+.ngo-table {
+  width: 95%;
+  max-width: 1200px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ngo-table th,
+.ngo-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  word-break: break-word;
+}
+
+.ngo-table th:first-child,
+.ngo-table td:first-child {
+  width: 70px; /* Serial number column */
+  text-align: center;
+}
+
+.ngo-table th:nth-child(2),
+.ngo-table td:nth-child(2) {
+  width: 150px; /* Name column */
+}
+
+.ngo-table th:nth-child(3),
+.ngo-table td:nth-child(3) {
+  width: 120px; /* License No column */
+}
+
+.ngo-table th:nth-child(4),
+.ngo-table td:nth-child(4) {
+  width: 180px; /* Contact Email column */
+}
+
+.ngo-table th:nth-child(5),
+.ngo-table td:nth-child(5) {
+  width: 120px; /* Phone column */
+}
+
+.ngo-table th:nth-child(6),
+.ngo-table td:nth-child(6) {
+  width: 100px; /* Actions column */
+  text-align: center;
+}
+
+/* Adjustments for additional columns */
+.ngo-table th:nth-child(7),
+.ngo-table td:nth-child(7) {
+  width: 140px; /* Example additional column */
+}
+
+.ngo-table th:nth-child(8),
+.ngo-table td:nth-child(8) {
+  width: 140px; /* Example additional column */
+}
+
+.ngo-table th:nth-child(9),
+.ngo-table td:nth-child(9) {
+  width: 160px; /* Example additional column */
+}
+
+.ngo-table th:nth-child(10),
+.ngo-table td:nth-child(10) {
+  width: 160px; /* Example additional column */
+}
+
+.ngo-table th:nth-child(11),
+.ngo-table td:nth-child(11) {
+  width: 140px; /* Example additional column */
+}
+
+.ngo-table th:nth-child(12),
+.ngo-table td:nth-child(12) {
+  width: 140px; /* Example additional column */
+}
+
+.ngo-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.ngo-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.approve-button,
+.reject-button {
+  margin: 0 3px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.approve-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.reject-button {
+  background-color: #f44336;
+  color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .ngo-table {
+    font-size: 12px;
+  }
+
+  .approve-button,
+  .reject-button {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .ngo-table th,
+  .ngo-table td {
+    padding: 6px 8px;
+  }
 }
