@@ -7,7 +7,7 @@ export default function Canvas() {
         "images/1-3.jpg",
         "images/1-2.jpg",
         "images/1-1.jpeg",
-        
+        "images/1-4.jpg",
     ]
 
     const [images, setImages] = useState([]);
