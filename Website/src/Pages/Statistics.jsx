@@ -207,7 +207,7 @@ const Statistics = () => {
 
         {/* Charts Section */}
         <div className="row mb-4">
-          <div className="col-md-6">
+          <div className="col-md-12" style={{marginBottom:"25px"}}>
             <div className="card shadow-sm">
               <div className="card-body">
                 <h5 className="card-title text-center">Total Donations</h5>
@@ -224,7 +224,7 @@ const Statistics = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="card shadow-sm">
               <div className="card-body">
                 <h5 className="card-title text-center">Donations Over Time</h5>
