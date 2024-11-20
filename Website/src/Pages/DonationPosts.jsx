@@ -37,6 +37,12 @@ const DonationPosts = () => {
 
     const fetchPosts = async (isInitialLoad = false) => {
         setLoading(true);
+
+        if (isInitialLoad) {
+            setNoMorePosts(false); 
+            setLastVisible(null);  
+        }
+
         let allPosts = [];
 
         if (selectedCategories.length > 0) {
