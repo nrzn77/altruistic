@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { Card, ListGroup, Row, Col } from 'react-bootstrap';
 import PostImage from '../Components/PostImage';
+import DonateButton from '../Components/DonateButton';
 
 const NGOOverview = () => {
   const { ngoId } = useParams();
@@ -62,17 +63,6 @@ const NGOOverview = () => {
     return <p>{error}</p>;
   }
 
-  const goToPayment = (postId, reachedAmount, targetedAmount, ngoName) => {
-    navigate("/payment-gateway", {
-      state: {
-        postId,
-        currentReachedAmount: reachedAmount,
-        targetedAmount,
-        ngoName
-      }
-    });
-  };
-
   return (
     <div>
       {ngoInfo ? (
@@ -93,10 +83,7 @@ const NGOOverview = () => {
                         {post.reachedAmount} / {post.targetedAmount} achieved
                       </ListGroup.Item>
                     </ListGroup>
-                    <button type="button" className="btn btn-primary mt-3 w-100"
-                      style={{ backgroundColor: 'var(--blue)', color: 'white' }} onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, ngoInfo.name)}>
-                      Donate Now!
-                    </button>
+                    <DonateButton post={post} />
                   </Card.Body>
                 </Card>
               ))}

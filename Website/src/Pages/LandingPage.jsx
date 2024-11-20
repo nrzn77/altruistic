@@ -34,8 +34,8 @@ export default function LandingPage({ userRole, setUserRole }) {
       <TopBar userRole={userRole} setUserRole={setUserRole} />
       <Canvas />
       {/* <div> */}
-        <h1 className="header-title">ClearAid</h1>
-        <div className="header-text">Altruism. Discretion. Transparency.</div>
+      <h1 className="header-title">ClearAid</h1>
+      <div className="header-text">Altruism. Discretion. Transparency.</div>
       {/* </div>
       <img src="/sweood.svg"/> */}
     </header>
@@ -61,6 +61,29 @@ export default function LandingPage({ userRole, setUserRole }) {
             <p>Sign-up as a Volunteer for hire</p>
           </div>
         </a>
+      </div>
+    </section>
+    <section className="section-stats">
+      <div className="section-content">
+        <div className="stat-container hidden hidden-bars">
+          <div className="stat-bar bar-1" style={{
+            height: "30vmin",
+            backgroundColor: "red"
+          }}></div>
+          <div className="stat-bar bar-2" style={{
+            height: "10vmin",
+            backgroundColor: "blue"
+          }}></div>
+          <div className="stat-bar bar-3" style={{
+            height: "20vmin",
+            backgroundColor: "green"
+          }}></div>
+        </div>
+        <p className="hidden hidden-default">We have collected over a million in donations!<br/>
+          <Link to="/Statistics">
+            View Statistics
+          </Link>
+        </p>
       </div>
     </section>
     <section className="section-2">

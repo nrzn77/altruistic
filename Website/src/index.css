@@ -111,7 +111,6 @@ section {
   justify-content: space-evenly;
 }
 
-
 /* section p {
   display: block;
   width: 50%;
@@ -310,11 +309,67 @@ section button:hover {
   font-size: 150%;
 }
 
+.stat-container {
+  min-width: 50vmin;
+  max-width: 50vmin;
+  min-height: 50vmin;
+  max-height: 50vmin;
+  border: 1px solid black;
+  border-top: none;
+  border-right: none;
+  overflow: hidden;
+  position: relative;
+  transition: scale .3s;
+}
+
+.stat-container:hover {
+  scale: 1.05;
+}
+
+.section-stats .section-content {
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.section-stats p {
+  /* text-align: justify; */
+  padding: 5px;
+  font-size: 150%;
+}
+
+.stat-bar {
+  width: 10vmin;
+  position: absolute;
+  bottom: 0px;
+}
+
+
+.bar-1 {
+  left: 5vmin;
+}
+
+.bar-2 {
+  left: 20vmin;
+}
+
+.bar-3 {
+  left: 35vmin;
+}
+
 .hidden-default {
   filter: blur(5px);
   transform: translate(0, 20px);
   opacity: 0;
   transition: 1s;
+}
+
+.hidden-bars .stat-bar {
+  transform: translate(0, 100%);
+  transition: 1s;
+}
+
+.show .stat-bar {
+  transform: translate(0, 0);
 }
 
 .hidden-side {
@@ -373,18 +428,20 @@ meter {
   padding: 4vmin; */
 }
 
-.ngo-dashboard-tab{
+.ngo-dashboard-tab {
   max-width: 800px;
   margin: 0 auto;
 }
-.ngo-dashboard h2{
+
+.ngo-dashboard h2 {
   text-align: center;
 }
-.ngo-dashboard{
+
+.ngo-dashboard {
   padding: 20px;
 }
 
-.ngo-overview{
+.ngo-overview {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;

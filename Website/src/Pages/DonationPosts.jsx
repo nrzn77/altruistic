@@ -160,6 +160,7 @@ import { collection, getDocs, query, orderBy, limit, startAfter, where } from 'f
 import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import PostImage from '../Components/PostImage';
+import DonateButton from '../Components/DonateButton';
 
 import './Donation.css'; // CSS FILE FOR THE DONATION PAGE
 
@@ -242,17 +243,6 @@ const DonationPosts = () => {
         navigate('/ngo/' + ngoId);
     };
 
-    const goToPayment = (postId, reachedAmount, targetedAmount, ngoName) => {
-        navigate('/payment-gateway', {
-            state: {
-                postId,
-                currentReachedAmount: reachedAmount,
-                targetedAmount,
-                ngoName
-            }
-        });
-    };
-
     useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -314,15 +304,7 @@ const DonationPosts = () => {
                         <p>
                             <strong>Reached Amount:</strong> {post.reachedAmount}
                         </p>
-                        {post.reachedAmount < post.targetedAmount && <button
-                            type="button"
-                            className="btn btn-primary mt-3 w-100"
-                            style={{ backgroundColor: 'var(--blue)', color: 'white' }}
-                            onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, post.ngoName)}
-                        >
-                            Donate Now!
-                        </button>}
-                        {post.reachedAmount >= post.targetedAmount && <>Thanks to all our donnors, we have reached our target!</>}
+                        <DonateButton post={post} />
                         <button
                             type="button"
                             className="btn btn-secondary mt-3 w-100"
