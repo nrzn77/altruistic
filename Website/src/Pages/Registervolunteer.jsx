@@ -166,7 +166,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
 
 
             <div className="form-group mb-3">
-              {/* <label>Name:</label> */}
+              <label>Name:</label>
               <input
                 type="text"
                 className="form-control"
@@ -193,7 +193,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
             </div>
 
             <div className="form-group mb-3">
-              {/* <label>Skills:</label> */}
+              <label>Skills:</label>
               <input
                 type="text"
                 className="form-control"
@@ -220,7 +220,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
             </div>
 
             <div className="form-group mb-3">
-              {/* <label>Photo:</label> */}
+              <label>Photo:</label>
               <input
                 type="file"
                 className="form-control"

@@ -86,23 +86,26 @@ const Dashboard = ({ setUserRole }) => {
 
   return (
     <div className='ngo-dashboard'>
+      {!NGOData && "Loading"}
+      {NGOData && <>
       <h1>Welcome to Your Dashboard!</h1>
       <p>You are logged in as {auth.currentUser?.email}</p>
-
+      {!NGOData.verified_status && <b>You have not yet been approved by an Admin.</b>}
       <Row className="gy-2">
-        <Col xs={12} sm="auto">
+        {NGOData.verified_status && <Col xs={12} sm="auto">
           <Link to="/CreatePost">
             <Button variant="primary" className="w-100">
               Create a post asking for money
             </Button>
           </Link>
-        </Col>
+        </Col>}
         <Col xs={12} sm="auto">
           <Button variant="secondary" onClick={handleLogout} className="w-100">
             Logout
           </Button>
         </Col>
       </Row>
+      </>}
 
       {NGOData && (
         <div>
