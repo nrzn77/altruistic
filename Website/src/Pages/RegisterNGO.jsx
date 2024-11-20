@@ -1,162 +1,10 @@
-// import React, { useState } from 'react';
-// import { auth, db } from '../firebase-config'; 
-// import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { collection, addDoc } from 'firebase/firestore';
-
-// const RegisterNGO = () => {
-//   const [formData, setFormData] = useState({
-    
-//     name: '',
-//     aboutUs: '',
-//     licenseNo: '',
-//     email: '',
-//     phone: '',
-   
-//     paymentInfo: {
-//       cash: '',
-//       mobilePayment: '',
-//       wireTransfer: {
-//         accountNumber: '',
-//         branchName: '',
-//         bankName: '',
-//       }
-//     },
-//     username: '',
-//     password: ''
-//   });
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value
-//     });
-//   };
-
-//   const handlePaymentInfoChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       paymentInfo: {
-//         ...prevData.paymentInfo,
-//         [name]: value
-//       }
-//     }));
-//   };
-
-//   const handleWireTransferChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       paymentInfo: {
-//         ...prevData.paymentInfo,
-//         wireTransfer: {
-//           ...prevData.paymentInfo.wireTransfer,
-//           [name]: value
-//         }
-//       }
-//     }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-     
-//       const userCredential = await createUserWithEmailAndPassword(auth, formData.username, formData.password);
-//       const user = userCredential.user;
-
-      
-//       await addDoc(collection(db, 'NGOs'), {
-        
-//         name: formData.name,
-//         aboutUs: formData.aboutUs,
-//         licenseNo: formData.licenseNo,
-//         contactInfo: {
-//           email: formData.email,
-//           phone: formData.phone
-//         },
-//         paymentInfo: {
-//           cash: formData.paymentInfo.cash,
-//           mobilePayment: formData.paymentInfo.mobilePayment,
-//           wireTransfer: {
-//             accountNumber: formData.paymentInfo.wireTransfer.accountNumber,
-//             branchName: formData.paymentInfo.wireTransfer.branchName,
-//             bankName: formData.paymentInfo.wireTransfer.bankName,
-//           }
-//         },
-//         userId: user.uid,
-//         role: 'NGO'
-//       });
-
-//       alert('NGO registration complete!');
-//     } catch (error) {
-//       console.error('Error registering NGO:', error);
-//       alert('Error registering NGO, please try again.');
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <h2>Register Your NGO</h2>
-
-     
-
-//       <label>Name:</label>
-//       <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
-
-//       <label>About Us (Past Projects, Est. Date, Mission, Aim):</label>
-//       <textarea name="aboutUs" value={formData.aboutUs} onChange={handleInputChange} required />
-
-//       <label>License No:</label>
-//       <input type="text" name="licenseNo" value={formData.licenseNo} onChange={handleInputChange} required />
-
-//       <h3>Contact Info</h3>
-//       <label>Email:</label>
-//       <input type="email" name="email" value={formData.email} onChange={handleInputChange} required />
-
-//       <label>Phone:</label>
-//       <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required />
-
-//       <h3>Payment Info</h3>
-//       <label>Cash (Physical Address):</label>
-//       <input type="text" name="cash" value={formData.paymentInfo.cash} onChange={handlePaymentInfoChange} />
-
-//       <label>Mobile Payment (Mobile Number):</label>
-//       <input type="text" name="mobilePayment" value={formData.paymentInfo.mobilePayment} onChange={handlePaymentInfoChange} />
-
-//       <h4>Wire Transfer Info</h4>
-//       <label>Account Number:</label>
-//       <input type="text" name="accountNumber" value={formData.paymentInfo.wireTransfer.accountNumber} onChange={handleWireTransferChange} />
-
-//       <label>Branch Name:</label>
-//       <input type="text" name="branchName" value={formData.paymentInfo.wireTransfer.branchName} onChange={handleWireTransferChange} />
-
-//       <label>Bank Name:</label>
-//       <input type="text" name="bankName" value={formData.paymentInfo.wireTransfer.bankName} onChange={handleWireTransferChange} />
-
-//       <h3>Login Credentials</h3>
-//       <label>Username (Email):</label>
-//       <input type="email" name="username" value={formData.username} onChange={handleInputChange} required />
-
-//       <label>Password:</label>
-//       <input type="password" name="password" value={formData.password} onChange={handleInputChange} required />
-
-//       <button type="submit">Register NGO</button>
-//     </form>
-//   );
-// };
-
-// export default RegisterNGO;
-
-
 import React, { useState } from 'react';
-import { auth, db } from '../firebase-config'; 
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-// import { setRole } from '../Components/role';
+import { auth, db } from '../firebase-config';
 
-const RegisterNGO = ({setUserRole}) => {
+const RegisterNGO = ({ setUserRole }) => {
   const [formData, setFormData] = useState({
     name: '',
     aboutUs: '',
@@ -170,18 +18,43 @@ const RegisterNGO = ({setUserRole}) => {
         accountNumber: '',
         branchName: '',
         bankName: '',
-      }
+      },
     },
     username: '',
-    password: ''
+    password: '',
   });
+
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [useSameNumberForPayment, setUseSameNumberForPayment] = useState(false);
+  const [useSameEmailForUsername, setUseSameEmailForUsername] = useState(false);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+
+    if (name === 'phone' && useSameNumberForPayment) {
+      setFormData({
+        ...formData,
+        phone: value,
+        paymentInfo: {
+          ...formData.paymentInfo,
+          mobilePayment: value, 
+        },
+      });
+    } 
+    else if (name === 'email' && useSameEmailForUsername) {
+      setFormData({
+        ...formData,
+        email: value,
+        username: value, 
+      });
+    } 
+    else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handlePaymentInfoChange = (e) => {
@@ -190,8 +63,8 @@ const RegisterNGO = ({setUserRole}) => {
       ...prevData,
       paymentInfo: {
         ...prevData.paymentInfo,
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
   };
 
@@ -203,52 +76,131 @@ const RegisterNGO = ({setUserRole}) => {
         ...prevData.paymentInfo,
         wireTransfer: {
           ...prevData.paymentInfo.wireTransfer,
-          [name]: value
-        }
-      }
+          [name]: value,
+        },
+      },
     }));
   };
 
+  const handleCheckboxChange = () => {
+    const newUseSameNumberForPayment = !useSameNumberForPayment;
+    setUseSameNumberForPayment(newUseSameNumberForPayment);
+
+    if (!newUseSameNumberForPayment) {
+      setFormData((prevData) => ({
+        ...prevData,
+        paymentInfo: {
+          ...prevData.paymentInfo,
+          mobilePayment: '', 
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        paymentInfo: {
+          ...prevData.paymentInfo,
+          mobilePayment: prevData.phone, 
+        },
+      }));
+    }
+  };
+
+  const handleUsernameCheckboxChange = () => {
+    const newUseSameEmailForUsername = !useSameEmailForUsername;
+    setUseSameEmailForUsername(newUseSameEmailForUsername);
+    if (!newUseSameEmailForUsername) {
+      setFormData((prevData) => ({
+        ...prevData,
+        username: '',
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        username: prevData.email,
+      }));
+    }
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setUserRole('ngo')
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.username, formData.password);
-      const user = userCredential.user;
+  
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Invalid email address");
+      return;
+    }
 
-      await addDoc(collection(db, 'NGOs'), {
+    const phoneRegex = /^(013|014|015|016|017|018|019)\d{8}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      alert("Invalid phone number");
+      return;
+    }
+  
+
+    if (
+      !useSameNumberForPayment &&
+      (!formData.paymentInfo.mobilePayment || !phoneRegex.test(formData.paymentInfo.mobilePayment))
+    ) {
+      alert("Invalid mobile payment number");
+      return;
+    }
+  
+    if (formData.password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+  
+    try {
+      setUserRole("ngo");
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.username,
+        formData.password
+      );
+      const user = userCredential.user;
+  
+      await addDoc(collection(db, "NGOs"), {
         name: formData.name,
         aboutUs: formData.aboutUs,
         licenseNo: formData.licenseNo,
         contactInfo: {
           email: formData.email,
-          phone: formData.phone
+          phone: formData.phone,
         },
-        paymentInfo: {
-          cash: formData.paymentInfo.cash,
-          mobilePayment: formData.paymentInfo.mobilePayment,
-          wireTransfer: {
-            accountNumber: formData.paymentInfo.wireTransfer.accountNumber,
-            branchName: formData.paymentInfo.wireTransfer.branchName,
-            bankName: formData.paymentInfo.wireTransfer.bankName,
-          }
-        },
+        paymentInfo: formData.paymentInfo,
         userId: user.uid,
-        role: 'NGO'
+        role: "NGO",
       });
-
-      alert('NGO registration complete!');
+  
+      alert("NGO registration complete!");
     } catch (error) {
-      setUserRole(null)
-      console.error('Error registering NGO:', error);
-      alert('Error registering NGO, please try again.');
+      setUserRole(null);
+      console.error("Error registering NGO:", error);
+      alert("Error registering NGO, please try again.");
     }
   };
+  
+
+  const isPasswordMatching =
+    formData.password && confirmPassword === formData.password;
+
+  const isMobilePaymentValid =
+    !useSameNumberForPayment &&
+    formData.paymentInfo.mobilePayment &&
+    /^(013|014|015|016|017|018|019)\d{8}$/.test(formData.paymentInfo.mobilePayment);
+
+    const isUserNameValid = 
+    !useSameEmailForUsername &&
+      formData.username && 
+      /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username);
+
 
   return (
-    <Container className="mt-5">
-      <Form onSubmit={handleSubmit}>
-        <h2 className="mb-4">Register Your NGO</h2>
+    <Container className="mt-4" style={{ paddingBottom: '50px'}}>
+      <h1 className="text-center mb-4" style={{color: '#211940'}}>NGO Registration</h1>
+      <Form onSubmit={handleSubmit} className="border p-4 rounded-shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px'}}>
+        {/* <h2 className="mb-4 text-center" style={{color: '#211940'}}>Register Your NGO</h2> */}
 
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formName">
@@ -291,18 +243,32 @@ const RegisterNGO = ({setUserRole}) => {
 
         <h3>Contact Info</h3>
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="formEmail">
-            <Form.Label>Email</Form.Label>
+          <Form.Group as={Col} sm={12} md={6} controlId="formEmail">
+           <Form.Label>Email</Form.Label>
             <Form.Control
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
+             type="email"
+             name="email"
+             value={formData.email}
+             onChange={handleInputChange}
+             required
+             style={{
+               borderColor:
+                  !formData.email
+                   ? '#ced4da'
+                   : /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email)
+                   ? 'green'
+                   : 'red',
+              }}
             />
+            {formData.email &&
+             !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.email) && (
+              <Form.Text style={{ color: 'red' }}>
+                Invalid Email
+          </Form.Text>
+        )}
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formPhone">
+          <Form.Group as={Col} sm={12} md={6} controlId="formPhone">
             <Form.Label>Phone</Form.Label>
             <Form.Control
               type="tel"
@@ -310,13 +276,27 @@ const RegisterNGO = ({setUserRole}) => {
               value={formData.phone}
               onChange={handleInputChange}
               required
+              style={{
+                borderColor:
+                  !formData.phone
+                    ? '#ced4da'
+                    : /^(013|014|015|016|017|018|019)\d{8}$/.test(formData.phone)
+                    ? 'green'
+                    : 'red',
+              }}
             />
+            {formData.phone &&
+            !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.phone) && (
+             <Form.Text style={{ color: 'red' }}>
+                Invalid phone number
+          </Form.Text>
+        )}
           </Form.Group>
         </Row>
 
         <h3>Payment Info</h3>
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="formCash">
+          <Form.Group as={Col} sm={12} md={6} controlId="formCash">
             <Form.Label>Cash (Physical Address)</Form.Label>
             <Form.Control
               type="text"
@@ -326,30 +306,52 @@ const RegisterNGO = ({setUserRole}) => {
             />
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formMobilePayment">
+          <Form.Group as={Col} sm={12} md={6} controlId="formMobilePayment">
             <Form.Label>Mobile Payment (Mobile Number)</Form.Label>
             <Form.Control
               type="text"
               name="mobilePayment"
               value={formData.paymentInfo.mobilePayment}
               onChange={handlePaymentInfoChange}
+              disabled={useSameNumberForPayment}
+              style={{
+                borderColor:
+                !formData.paymentInfo.mobilePayment || useSameNumberForPayment
+                    ? '#ced4da'
+                  :isMobilePaymentValid
+                    ? 'green'
+                    : 'red',
+              }}
             />
+            <Form.Check
+              type="checkbox"
+              label="Use same number for payment"
+              checked={useSameNumberForPayment}
+              onChange={handleCheckboxChange}
+            />
+
+          {formData.paymentInfo.mobilePayment &&
+        !/^(013|014|015|016|017|018|019)\d{8}$/.test(formData.paymentInfo.mobilePayment) && (
+          <Form.Text style={{ color: 'red' }}>
+            Invalid phone number
+          </Form.Text>
+        )}
           </Form.Group>
         </Row>
 
-        <h4>Wire Transfer Info</h4>
+        <h4>Bank Transfer Info</h4>
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="formAccountNumber">
-            <Form.Label>Account Number</Form.Label>
+          <Form.Group as={Col} sm={12} md={4} controlId="formBankName">
+            <Form.Label>Bank Name</Form.Label>
             <Form.Control
               type="text"
-              name="accountNumber"
-              value={formData.paymentInfo.wireTransfer.accountNumber}
+              name="bankName"
+              value={formData.paymentInfo.wireTransfer.bankName}
               onChange={handleWireTransferChange}
             />
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formBranchName">
+          <Form.Group as={Col} sm={12} md={4} controlId="formBranchName">
             <Form.Label>Branch Name</Form.Label>
             <Form.Control
               type="text"
@@ -359,31 +361,55 @@ const RegisterNGO = ({setUserRole}) => {
             />
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formBankName">
-            <Form.Label>Bank Name</Form.Label>
+          <Form.Group as={Col} sm={12} md={4} controlId="formAccountNumber">
+            <Form.Label>Account Number</Form.Label>
             <Form.Control
               type="text"
-              name="bankName"
-              value={formData.paymentInfo.wireTransfer.bankName}
+              name="accountNumber"
+              value={formData.paymentInfo.wireTransfer.accountNumber}
               onChange={handleWireTransferChange}
             />
           </Form.Group>
         </Row>
 
         <h3>Login Credentials</h3>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formUsername">
-            <Form.Label>Username (Email)</Form.Label>
-            <Form.Control
-              type="email"
-              name="username"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
 
-          <Form.Group as={Col} controlId="formPassword">
+        <Row className="mb-3">
+        <Form.Group as={Col} controlId="formUsername">
+        <Form.Label>Username (Email)</Form.Label>
+        <Form.Control
+          type="email"
+         name="username"
+          value={formData.username}
+          onChange={handleInputChange}
+          required
+          disabled={useSameEmailForUsername} 
+          style={{
+            borderColor:
+            !formData.username || useSameEmailForUsername
+                ? '#ced4da'
+              :isUserNameValid
+                ? 'green'
+                : 'red',
+          }}
+        />
+        <Form.Check
+          type="checkbox"
+          label="Use same email as username"
+          checked={useSameEmailForUsername}
+          onChange={handleUsernameCheckboxChange}
+        />
+       {formData.username &&
+        !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(formData.username) && (
+          <Form.Text style={{ color: 'red' }}>
+            Invalid Email
+          </Form.Text>
+        )}
+      </Form.Group>
+    </Row>
+
+        <Row className="mb-3">
+          <Form.Group as={Col} sm={12} md={6} controlId="formPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
@@ -392,22 +418,54 @@ const RegisterNGO = ({setUserRole}) => {
               onChange={handleInputChange}
               required
             />
+            <Form.Text
+              style={{
+                  color: !formData.password || formData.password.length>=6 ? 'transparent' : 'red',
+              }}
+            >
+              Password should consist atleast 6 characters 
+          </Form.Text>
+          </Form.Group>
+
+          
+
+          <Form.Group as={Col} sm={12} md={6} controlId="formConfirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              disabled={!formData.password}
+              style={{
+                borderColor: !formData.password
+                  ? '#ced4da'
+                  : isPasswordMatching
+                  ? 'green'
+                  : 'red',
+              }}
+            />
+            <Form.Text
+              style={{
+                  color: !formData.password || isPasswordMatching ? 'transparent' : 'red',
+              }}
+            >
+              Password does not match
+          </Form.Text>
           </Form.Group>
         </Row>
 
-        <Button variant="primary" type="submit" className="w-100" style={{ backgroundColor: 'var(--blue)', color: 'white' }} >
+        <Button
+          variant="primary"
+          type="submit"
+          className="w-100 mt-1 mb-4"
+          style={{ backgroundColor: 'var(--blue)', color: 'white' }}
+        >
           Register NGO
         </Button>
-        <br />
-        <br />
       </Form>
     </Container>
   );
 };
 
 export default RegisterNGO;
-
-
-
-
-

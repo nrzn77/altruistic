@@ -140,7 +140,7 @@ const DonationPosts = () => {
 
     return (
         <div className="donations-page">
-            <p className='text-center' style={{ fontSize: '45px' }}>Donation Posts</p>
+            <p className='text-center' style={{ fontSize: '45px', color:'#211940' }}>Donation Posts</p>
 
             {/* Filter and Search Options */}
             <div className="filter-search-container">

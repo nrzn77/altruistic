@@ -16,8 +16,27 @@ const RegisterVolunteer = ({ setUserRole }) => {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (!/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email)) {
+      alert('Invalid email address');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if(password!=confirmPassword){
+      alert('Password does not match');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -63,71 +82,101 @@ const RegisterVolunteer = ({ setUserRole }) => {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4" style={{ color: '#260d54' }}>Volunteer Registration</h1><br />
+    <div className="container mt-3">
+      <h1 className="text-center mb-4" style={{color: '#211940'}}>Volunteer Registration</h1>
       <div className="row justify-content-center">
-        <div className="col-md-6" style={{ marginBottom: '70px' }}>
-          <form
-            onSubmit={handleRegister}
-            className="border p-4"
-            style={{
-              backgroundColor: 'white',
-              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.15)',
-              borderRadius: '12px',
-              transform: 'translateY(-20px)',
-              border: 'none',
-            }}
-          >
-            {/* Custom styles for input fields */}
-            <style>
-              {`
-                .form-control {
-                  border: none; /* Remove all borders */
-                  border-bottom: 2px solid #ccc; /* Add only bottom border */
-                  border-radius: 0; /* Remove rounded edges */
-                  outline: none; /* Remove focus outline */
-                  transition: border-bottom-color 0.3s ease; /* Add smooth transition */
-                }
-
-                .form-control:focus {
-                  border-bottom-color: var(--blue); /* Highlight bottom border on focus */
-                  box-shadow: none; /* Prevent shadow on focus */
-                }
-              `}
-            </style>
-            <div className="form-group mb-3">
-              {/* <label>Email:</label> */}
+        <div className="col-md-7" style={{ marginBottom: '50px' }}>
+          <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px' }}>
+            <div className="form-group mb-2">
+              <label>Email:</label>
               <input
                 type="email"
                 className="form-control"
-                placeholder="Email"
+                // placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                style={{
+                  borderColor: !email
+                    ? '#ced4da'
+                    : /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email)
+                    ? 'green'
+                    : 'red',
+                }}
               />
+              {email && !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email) && (
+                <small style={{ color: 'red', fontSize: '12px' }}>Invalid email</small>
+              )}
             </div>
-            <div className="form-group mb-3">
-              {/* <label>Password:</label> */}
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+
+            <div
+              style={{
+               display: 'flex', justifyContent: 'space-between', gap: '10px'
+             }}
+            >
+              <div className="form-group mb-2" style={{ flex: '1 1 300px' }}>
+                <label>Password:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  // placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  style={{
+                    borderColor: !password
+                      ? '#ced4da'
+                      : password.length >= 6
+                      ? 'green'
+                      : 'red',
+                  }}
+                />
+                {password && password.length < 6 && (
+                  <small style={{ color: 'red', fontSize: '12px' }}>
+                    Password must be at least 6 characters long.
+                  </small>
+                )}
+              </div>
+
+              <div className="form-group mb-2" style={{ flex: '1 1 300px' }}>
+                <label>Confirm Password:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  // placeholder="Confirm Password"
+                  value={confirmPassword}
+                  disabled={!password}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  style={{
+                    borderColor: !confirmPassword
+                     ? '#ced4da'
+                      : confirmPassword === password
+                      ? 'green'
+                      : 'red',
+                  }}
+                />
+                {confirmPassword && confirmPassword !== password && (
+                  <small style={{ color: 'red', fontSize: '12px' }}>
+                    Passwords do not match.
+                  </small>
+                )}
+              </div>
             </div>
+
+
             <div className="form-group mb-3">
               {/* <label>Name:</label> */}
               <input
                 type="text"
                 className="form-control"
-                placeholder="Name"
+                // placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
+
             <div className="form-group mb-3">
               <label>Date of Birth:</label>
               <input
@@ -137,28 +186,39 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 required
+                max={new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+                  .toISOString()
+                  .split('T')[0]}
               />
             </div>
+
             <div className="form-group mb-3">
               {/* <label>Skills:</label> */}
               <input
                 type="text"
                 className="form-control"
-                placeholder="Skills"
+                // placeholder="Skills"
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
                 required
               />
             </div>
+
             <div className="form-group mb-3">
-              {/* <label>Gender:</label> */}
-              <select className="form-control" value={gender} onChange={(e) => setGender(e.target.value)} required>
+              <label>Gender:</label>
+              <select
+                className="form-control"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
+              >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
             </div>
+
             <div className="form-group mb-3">
               {/* <label>Photo:</label> */}
               <input
@@ -168,18 +228,34 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 onChange={(e) => setPhoto(e.target.files[0])}
               />
             </div>
+
             <div className="form-group mb-3">
-              {/* <label>Area:</label> */}
-              <input
-                type="text"
+              <label>Area:</label>
+              <select
                 className="form-control"
-                placeholder="Area"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
-              />
+                required
+              >
+                <option value="" disabled>
+                  Select your Area
+                </option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Chattogram">Chattogram</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Barishal">Barishal</option>
+                <option value="Sylhet">Sylhet</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Mymensingh">Mymensingh</option>
+              </select>
             </div>
-            <button type="submit" className="btn btn-primary w-100"
-              style={{ backgroundColor: 'var(--blue)', color: 'white' }} disabled={loading}>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              style={{ backgroundColor: 'var(--blue)', color: 'white' }}
+            >
               {loading ? 'Registering...' : 'Register Volunteer'}
             </button>
           </form>
