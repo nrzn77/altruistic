@@ -98,16 +98,15 @@ const LoginVO = ({setUserRole}) => {
       <p className="text-center"
         style={
           {
-            fontSize: '60px',
-            fontWeight: 'bold',
+            fontSize: '40px',
             marginBottom: '1px'
           }
         }>Login</p>
-      <h5 className="text-center mb-3">as Volunteers</h5>
+      <h5 style={{ fontSize: '35px' }} className="text-center mb-3">Volunteer</h5>
       
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <form onSubmit={handleEmailLogin} className="border p-4 rounded shadow-sm">
+          <form onSubmit={handleEmailLogin} className="border p-4 rounded shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
             <div className="form-group mb-3">
               <label htmlFor="email" className="form-label">Email:</label>
               <input type="email" name="email" id="email" className="form-control" required />

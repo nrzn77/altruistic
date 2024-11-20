@@ -3,9 +3,7 @@ import { collection, getDocs, query, orderBy, limit, startAfter, where } from 'f
 import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import PostImage from '../Components/PostImage';
-import PostCard from '../Components/PostCard';
-
-import './Donation.css'; // CSS FILE FOR THE DONATION PAGE
+import './Donation.css';
 
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -35,6 +33,9 @@ const DonationPosts = () => {
         const ngoSnapshots = await getDocs(q);
         return ngoSnapshots.docs[0] ? ngoSnapshots.docs[0].data() : null;
     };
+
+    const [sortOrder, setSortOrder] = useState('');
+
 
     const fetchPosts = async (isInitialLoad = false) => {
         setLoading(true);
@@ -113,6 +114,21 @@ const DonationPosts = () => {
         fetchPosts(true);
     }, [selectedCategories]);
 
+    const viewNGOOverview = (ngoId) => {
+        navigate('/ngo/' + ngoId);
+    };
+
+    const goToPayment = (postId, reachedAmount, targetedAmount, ngoName) => {
+        navigate('/payment-gateway', {
+            state: {
+                postId,
+                currentReachedAmount: reachedAmount,
+                targetedAmount,
+                ngoName
+            }
+        });
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -147,7 +163,7 @@ const DonationPosts = () => {
                         X
                     </button>
                     <div className="checkbox-container">
-                        {[' Natural Disaster', ' Medical Treatment', ' Education', ' Social Welfare', ' Animal Rescue'].map((category) => (
+                        {['Natural Disaster', 'Medical Treatment', 'Education', 'Social Welfare', 'Animal Rescue'].map((category) => (
                             <label key={category}>
                                 <input
                                     type="checkbox"
@@ -161,23 +177,66 @@ const DonationPosts = () => {
                     </div>
                 </div>
                 <select
-                    value={selectedCategories}
-                    onChange={(e) => setSelectedCategories([e.target.value])}
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
                     className="category-filter"
                 >
-                    <option value="" disabled >
-                        Sort by 
-                     </option>
-                    <option value="High to Low">Maximum to least donation</option>
-                    <option value="low to high">Least to Maximum donation</option>
-                </ select>
+                <option value="" disabled>
+                    Sort by
+                </option>
+                <option value="High to Low">Maximum to least donation</option>
+                <option value="low to high">Least to Maximum donation</option>
+            </select>
+
             
 
             </div>
 
             <div className="posts-container">
-                {posts.map((post, index) => (
-                    <PostCard post={post} key={index}/>
+                {posts.map((post) => (
+                    <div key={post.id} className="post-card">
+                        <h3>{post.title}</h3>
+                        <i>{post.cause}</i>
+                        <h6 className="post-creator" onClick={() => viewNGOOverview(post.createdBy)}>
+                            {post.ngoName}
+                        </h6>
+                        <PostImage post={post} />
+                        <p>{post.description}</p>
+                        <p>
+                            <strong>Targeted Amount:</strong> {post.targetedAmount}
+                        </p>
+                        <meter
+                            value={post.reachedAmount}
+                            min="0"
+                            max={post.targetedAmount}
+                            low={post.targetedAmount / 2}
+                            style={{ width: '100%', height: '35px' }}
+                        ></meter>
+                        <p>
+                            <strong>Reached Amount:</strong> {post.reachedAmount}
+                        </p>
+                        {post.reachedAmount < post.targetedAmount && (
+                            <button
+                                type="button"
+                                className="btn btn-primary mt-3 w-100"
+                                style={{ backgroundColor: 'var(--blue)', color: 'white' }}
+                                onClick={() => goToPayment(post.id, post.reachedAmount, post.targetedAmount, post.ngoName)}
+                            >
+                                Donate Now!
+                            </button>
+                        )}
+                        {post.reachedAmount >= post.targetedAmount && (
+                            <p>Thanks to all our donors, we have reached our target!</p>
+                        )}
+                        <button
+                            type="button"
+                            className="btn btn-secondary mt-3 w-100"
+                            style={{ backgroundColor: '#a1ddec', color: 'black' }}
+                            onClick={() => navigate(`/updates/${post.id}`)}
+                        >
+                            Updates
+                        </button>
+                    </div>
                 ))}
             </div>
 

@@ -83,16 +83,16 @@ const RegisterVolunteer = ({ setUserRole }) => {
 
   return (
     <div className="container mt-3">
-      <h1 className="text-center mb-4">Volunteer Registration</h1>
+      <h1 className="text-center mb-4" style={{color: '#211940'}}>Volunteer Registration</h1>
       <div className="row justify-content-center">
-        <div className="col-md-7">
-          <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm">
+        <div className="col-md-7" style={{ marginBottom: '50px' }}>
+          <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px' }}>
             <div className="form-group mb-2">
               <label>Email:</label>
               <input
                 type="email"
                 className="form-control"
-                placeholder="Email"
+                // placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -119,7 +119,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Password"
+                  // placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -143,7 +143,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Confirm Password"
+                  // placeholder="Confirm Password"
                   value={confirmPassword}
                   disabled={!password}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -170,7 +170,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Name"
+                // placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -197,7 +197,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Skills"
+                // placeholder="Skills"
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
                 required
