@@ -5,6 +5,7 @@ import { db } from '../firebase-config';
 import { Card, ListGroup, Row, Col } from 'react-bootstrap';
 import PostImage from '../Components/PostImage';
 import DonateButton from '../Components/DonateButton';
+import GoToUpdatesButton from '../Components/GoToUpdatesButton';
 
 const NGOOverview = () => {
   const { ngoId } = useParams();
@@ -84,6 +85,7 @@ const NGOOverview = () => {
                       </ListGroup.Item>
                     </ListGroup>
                     <DonateButton post={post} />
+                    <GoToUpdatesButton post={post} />
                   </Card.Body>
                 </Card>
               ))}
