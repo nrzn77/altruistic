@@ -197,9 +197,10 @@ const RegisterNGO = ({ setUserRole }) => {
 
 
   return (
-    <Container className="mt-4">
-      <Form onSubmit={handleSubmit}>
-        <h2 className="mb-4 text-center">Register Your NGO</h2>
+    <Container className="mt-4" style={{ paddingBottom: '50px'}}>
+      <h1 className="text-center mb-4" style={{color: '#211940'}}>NGO Registration</h1>
+      <Form onSubmit={handleSubmit} className="border p-4 rounded-shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px'}}>
+        {/* <h2 className="mb-4 text-center" style={{color: '#211940'}}>Register Your NGO</h2> */}
 
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formName">
