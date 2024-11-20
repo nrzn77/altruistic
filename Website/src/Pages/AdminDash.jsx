@@ -7,6 +7,7 @@ import {
   where,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
 import "./AdminDash.css";
@@ -24,7 +25,7 @@ const AdminDash = () => {
     try {
       const ngoQuery = query(
         collection(db, "NGOs"),
-        where("verified_status", "==", false) // Fetch only NGOs with verified_status as false
+        where("verified_status", "==", false)
       );
       const querySnapshot = await getDocs(ngoQuery);
       const ngoList = querySnapshot.docs.map((doc) => ({
@@ -42,12 +43,24 @@ const AdminDash = () => {
   const handleApprove = async (id) => {
     try {
       const ngoDoc = doc(db, "NGOs", id);
-      await updateDoc(ngoDoc, { verified_status: true }); // Update verified_status to true
+      await updateDoc(ngoDoc, { verified_status: true });
       alert("NGO approved successfully!");
-      fetchNgos(); // Refresh the list after update
+      fetchNgos();
     } catch (error) {
       console.error("Error approving NGO:", error);
       alert("Error approving NGO. Please try again.");
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      const ngoDoc = doc(db, "NGOs", id);
+      await deleteDoc(ngoDoc);
+      alert("NGO rejected and removed successfully!");
+      fetchNgos();
+    } catch (error) {
+      console.error("Error rejecting NGO:", error);
+      alert("Error rejecting NGO. Please try again.");
     }
   };
 
@@ -103,7 +116,12 @@ const AdminDash = () => {
                     >
                       Approve
                     </button>
-                    <button className="reject-button">Reject</button>
+                    <button
+                      className="reject-button"
+                      onClick={() => handleReject(ngo.id)}
+                    >
+                      Reject
+                    </button>
                   </td>
                 </tr>
               ))}
