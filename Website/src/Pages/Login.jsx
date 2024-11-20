@@ -94,8 +94,16 @@ const Login = ({setUserRole}) => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Login Page for NGOs</h2>
+    <div className="container mt-3">
+      <p className="text-center"
+        style={
+          {
+            fontSize: '60px',
+            fontWeight: 'bold',
+            marginBottom: '1px'
+          }
+        }>Login</p>
+      <h5 className="text-center mb-3">as NGO</h5>
 
       <div className="row justify-content-center">
         <div className="col-md-6">
@@ -109,7 +117,7 @@ const Login = ({setUserRole}) => {
               <input type="password" name="password" id="password" className="form-control" required />
             </div>
             <button type="submit" className="btn btn-primary w-100"
-              style={{ backgroundColor: 'var(--blue)', color: 'white' }}>Login with Email</button>
+              style={{ backgroundColor: 'var(--blue)', color: 'white' }}>Login</button>
           </form>
 
           <div className="text-center mt-3">

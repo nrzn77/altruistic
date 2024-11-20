@@ -1,152 +1,10 @@
-// // src/Pages/RegisterVolunteer.jsx
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { auth, db, storage } from '../firebase-config'; // Firestore, Auth, Storage imports
-// import { createUserWithEmailAndPassword } from 'firebase/auth'; // Firebase Auth method
-// import { collection, doc, setDoc } from 'firebase/firestore'; // Firestore methods
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase Storage methods
-
-// const RegisterVolunteer = () => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [name, setName] = useState('');
-//   const [dob, setDob] = useState('');
-//   const [skills, setSkills] = useState('');
-//   const [gender, setGender] = useState('');
-//   const [availability, setAvailability] = useState('available'); // Default availability
-//   const [area, setArea] = useState('');
-//   const [photo, setPhoto] = useState(null); // For file uploads
-//   const [loading, setLoading] = useState(false);
-
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-
-//     try {
-//       // Create a new user with email and password
-//       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-//       const user = userCredential.user;
-
-//       // Upload the volunteer's photo to Firebase Storage
-//       let photoURL = '';
-//       if (photo) {
-
-//         // Prepare the form data
-//         const formData = new FormData();
-//         formData.append('image', photo);
-
-//         try {
-//           // Make the POST request to the server
-//           const response = await axios.post('http://localhost:3000/upload', formData, {
-//             headers: {
-//               'Content-Type': 'multipart/form-data',
-//             },
-//           });
-
-//           console.log('Server response:', response.data);
-//           photoURL = response.data.url;
-//         } catch (error) {
-//           console.error('Error uploading the image:', error);
-//         }
-
-//       }
-
-//       // Save volunteer data in Firestore using the user.uid as the document ID
-//       await setDoc(doc(db, 'volunteers', user.uid), {
-//         name,
-//         dob,
-//         skills,
-//         gender,
-//         availability,
-//         area,
-//         role: 'Volunteer',
-//         photoURL, // Store photo URL
-//         email: user.email // Optionally store the email for easy access
-//       });
-
-//       alert('Volunteer registered successfully!');
-//     } catch (error) {
-//       console.error('Error registering volunteer: ', error);
-//       alert('Error registering volunteer. Please try again.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Volunteer Registration</h1>
-//       <form onSubmit={handleRegister}>
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="text"
-//           placeholder="Name"
-//           value={name}
-//           onChange={(e) => setName(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="date"
-//           placeholder="Date of Birth"
-//           value={dob}
-//           onChange={(e) => setDob(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="text"
-//           placeholder="Skills"
-//           value={skills}
-//           onChange={(e) => setSkills(e.target.value)}
-//           required
-//         />
-//         <select value={gender} onChange={(e) => setGender(e.target.value)} required>
-//           <option value="">Select Gender</option>
-//           <option value="Male">Male</option>
-//           <option value="Female">Female</option>
-//           <option value="Other">Other</option>
-//         </select>
-//         <input
-//           type="file"
-//           onChange={(e) => setPhoto(e.target.files[0])}
-//         />
-//         <input
-//           type="text"
-//           placeholder="Area"
-//           value={area}
-//           onChange={(e) => setArea(e.target.value)}
-//         />
-//         <button type="submit" disabled={loading}>
-//           {loading ? 'Registering...' : 'Register Volunteer'}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default RegisterVolunteer;
-
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { auth, db } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-// import { setRole } from '../Components/role';
 
-const RegisterVolunteer = ({setUserRole}) => {
+const RegisterVolunteer = ({ setUserRole }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -158,8 +16,27 @@ const RegisterVolunteer = ({setUserRole}) => {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (!/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email)) {
+      alert('Invalid email address');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if(password!=confirmPassword){
+      alert('Password does not match');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -205,13 +82,12 @@ const RegisterVolunteer = ({setUserRole}) => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
       <h1 className="text-center mb-4">Volunteer Registration</h1>
       <div className="row justify-content-center">
-        {/* This is where I added the col-md-6 class to limit the form width */}
-        <div className="col-md-6">
+        <div className="col-md-7">
           <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm">
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label>Email:</label>
               <input
                 type="email"
@@ -220,19 +96,75 @@ const RegisterVolunteer = ({setUserRole}) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                style={{
+                  borderColor: !email
+                    ? '#ced4da'
+                    : /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email)
+                    ? 'green'
+                    : 'red',
+                }}
               />
+              {email && !/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|iut-dhaka\.edu)$/.test(email) && (
+                <small style={{ color: 'red', fontSize: '12px' }}>Invalid email</small>
+              )}
             </div>
-            <div className="form-group mb-3">
-              <label>Password:</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+
+            <div
+              style={{
+               display: 'flex', justifyContent: 'space-between', gap: '10px'
+             }}
+            >
+              <div className="form-group mb-2" style={{ flex: '1 1 300px' }}>
+                <label>Password:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  style={{
+                    borderColor: !password
+                      ? '#ced4da'
+                      : password.length >= 6
+                      ? 'green'
+                      : 'red',
+                  }}
+                />
+                {password && password.length < 6 && (
+                  <small style={{ color: 'red', fontSize: '12px' }}>
+                    Password must be at least 6 characters long.
+                  </small>
+                )}
+              </div>
+
+              <div className="form-group mb-2" style={{ flex: '1 1 300px' }}>
+                <label>Confirm Password:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  disabled={!password}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  style={{
+                    borderColor: !confirmPassword
+                     ? '#ced4da'
+                      : confirmPassword === password
+                      ? 'green'
+                      : 'red',
+                  }}
+                />
+                {confirmPassword && confirmPassword !== password && (
+                  <small style={{ color: 'red', fontSize: '12px' }}>
+                    Passwords do not match.
+                  </small>
+                )}
+              </div>
             </div>
+
+
             <div className="form-group mb-3">
               <label>Name:</label>
               <input
@@ -244,6 +176,7 @@ const RegisterVolunteer = ({setUserRole}) => {
                 required
               />
             </div>
+
             <div className="form-group mb-3">
               <label>Date of Birth:</label>
               <input
@@ -253,8 +186,12 @@ const RegisterVolunteer = ({setUserRole}) => {
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 required
+                max={new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+                  .toISOString()
+                  .split('T')[0]}
               />
             </div>
+
             <div className="form-group mb-3">
               <label>Skills:</label>
               <input
@@ -266,15 +203,22 @@ const RegisterVolunteer = ({setUserRole}) => {
                 required
               />
             </div>
+
             <div className="form-group mb-3">
               <label>Gender:</label>
-              <select className="form-control" value={gender} onChange={(e) => setGender(e.target.value)} required>
+              <select
+                className="form-control"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
+              >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
             </div>
+
             <div className="form-group mb-3">
               <label>Photo:</label>
               <input
@@ -283,18 +227,34 @@ const RegisterVolunteer = ({setUserRole}) => {
                 onChange={(e) => setPhoto(e.target.files[0])}
               />
             </div>
+
             <div className="form-group mb-3">
               <label>Area:</label>
-              <input
-                type="text"
+              <select
                 className="form-control"
-                placeholder="Area"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
-              />
+                required
+              >
+                <option value="" disabled>
+                  Select your Area
+                </option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Chattogram">Chattogram</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Barishal">Barishal</option>
+                <option value="Sylhet">Sylhet</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Mymensingh">Mymensingh</option>
+              </select>
             </div>
-            <button type="submit" className="btn btn-primary w-100"
-              style={{ backgroundColor: 'var(--blue)', color: 'white' }} disabled={loading}>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              style={{ backgroundColor: 'var(--blue)', color: 'white' }}
+            >
               {loading ? 'Registering...' : 'Register Volunteer'}
             </button>
           </form>
