@@ -4,6 +4,7 @@ import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import PostImage from '../Components/PostImage';
 import './Donation.css';
+import { is } from 'date-fns/locale';
 
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -37,6 +38,10 @@ const DonationPosts = () => {
 
     const fetchPosts = async (isInitialLoad = false) => {
         setLoading(true);
+        if(isInitialLoad){
+            setNoMorePosts(false);
+            setLastVisible(null);
+        }
         let allPosts = [];
 
         if (selectedCategories.length > 0) {
