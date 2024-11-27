@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function VolunteerCard({ volunteer }) {
     return (
-        <Card className="my-3">
+        <Card className="mb-3 mt-2" style={{border:'solid 1px black'}}>
             <Row className="g-0">
                 <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
                     <Card.Img

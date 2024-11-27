@@ -30,13 +30,13 @@ const AvailableVolunteers = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Available Volunteers</h2>
+    <div style={{backgroundColor:'white',width:'100%',border:'none', padding:'5px 10px',borderRadius:'10px'}}>
+      <h2 className='mt-2'>Available Volunteers</h2>
 
       {loading ? (
         <p>Loading volunteers...</p>
       ) : volunteers.length > 0 ? (
-        <div className="volunteers-container ngo-dashboard-tab">
+        <div>
           {volunteers.map((volunteer) => (
             <div key={volunteer.id} className="volunteer-card">
               <VolunteerCard volunteer={volunteer} />

@@ -133,6 +133,14 @@ const RegisterNGO = ({ setUserRole }) => {
       return;
     }
 
+    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(formData.password)) {
+      alert("Password does not meet criteria: at least 8 characters, includes one lowercase letter, one uppercase letter, one digit, one special character, and no consecutive identical digits.");
+      return;
+    }
+
+
     const phoneRegex = /^(013|014|015|016|017|018|019)\d{8}$/;
     if (!phoneRegex.test(formData.phone)) {
       alert("Invalid phone number");
@@ -208,6 +216,9 @@ const RegisterNGO = ({ setUserRole }) => {
       alert("Error registering NGO, please try again.");
     }
   };
+
+  const isPasswordValid =
+      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password);
 
 
   const isPasswordMatching =
@@ -457,16 +468,24 @@ const RegisterNGO = ({ setUserRole }) => {
               value={formData.password}
               onChange={handleInputChange}
               required
-            />
-            <Form.Text
               style={{
-                color: !formData.password || formData.password.length >= 6 ? 'transparent' : 'red',
+                borderColor: !formData.password
+                  ? '#ced4da'
+                  : isPasswordValid
+                    ? 'green'
+                    : 'red',
+              }}
+            />
+            {formData.password && !isPasswordValid &&(<Form.Text
+              style={{
+                color: 'red'
               }}
             >
-              Password should consist atleast 6 characters
+              Invalid password
             </Form.Text>
+            )}
           </Form.Group>
-
+              
 
 
           <Form.Group as={Col} sm={12} md={6} controlId="formConfirmPassword">
@@ -485,14 +504,19 @@ const RegisterNGO = ({ setUserRole }) => {
                     : 'red',
               }}
             />
-            <Form.Text
+            {formData.password && !isPasswordMatching && (<Form.Text
               style={{
-                color: !formData.password || isPasswordMatching ? 'transparent' : 'red',
+                color: 'red'
               }}
             >
               Password does not match
             </Form.Text>
+            )}
           </Form.Group>
+        </Row>
+        <Row className='text-center mb-2'
+        style={{color: 'grey'}}>
+          *Password must contain atleast 8 characters including one uppercase letter, one lowercase letter, one special character, one number and no consecutive same number
         </Row>
 
         <Button

@@ -27,8 +27,10 @@ const RegisterVolunteer = ({ setUserRole }) => {
       return;
     }
 
-    if (password.length < 6) {
-      alert('Password must be at least 6 characters long.');
+    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      alert("Password does not meet criteria: at least 8 characters, includes one lowercase letter, one uppercase letter, one digit, one special character, and no consecutive identical digits.");
       return;
     }
 
@@ -80,7 +82,8 @@ const RegisterVolunteer = ({ setUserRole }) => {
       setLoading(false);
     }
   };
-
+  const isPasswordValid =
+      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
   return (
     <div className="container mt-3">
       <h1 className="text-center mb-4" style={{color: '#211940'}}>Volunteer Registration</h1>
@@ -126,14 +129,14 @@ const RegisterVolunteer = ({ setUserRole }) => {
                   style={{
                     borderColor: !password
                       ? '#ced4da'
-                      : password.length >= 6
+                      : isPasswordValid
                       ? 'green'
                       : 'red',
                   }}
                 />
-                {password && password.length < 6 && (
+                {password && !isPasswordValid && (
                   <small style={{ color: 'red', fontSize: '12px' }}>
-                    Password must be at least 6 characters long.
+                    Invalid Password
                   </small>
                 )}
               </div>
@@ -162,8 +165,9 @@ const RegisterVolunteer = ({ setUserRole }) => {
                   </small>
                 )}
               </div>
+            
             </div>
-
+            <div className='text-center' style={{color:'grey',fontSize:'14px'}}>*Password must contain atleast 8 characters including one uppercase letter, one lowercase letter, one special character, one number and no consecutive same number</div>
 
             <div className="form-group mb-3">
               <label>Name:</label>

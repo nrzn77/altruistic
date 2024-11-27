@@ -4,6 +4,7 @@ import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import PostImage from '../Components/PostImage';
 import './Donation.css';
+import { is } from 'date-fns/locale';
 
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -11,6 +12,7 @@ const DonationPosts = () => {
     const [loading, setLoading] = useState(false);
     const [noMorePosts, setNoMorePosts] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sidePanelVisible, setSidePanelVisible] = useState(false);
     const [sortOrder, setSortOrder] = useState('');
@@ -28,6 +30,14 @@ const DonationPosts = () => {
         );
     };
 
+    const handleStatusChange = (Status) => {
+        setSelectedStatus((prevStatus) =>
+            prevStatus.includes(Status)
+                ? prevStatus.filter((cat) => cat !== Status)
+                : [...prevStatus, Status]
+        );
+    };
+
     const getNGOData = async (postData) => {
         const ngoRef = collection(db, 'NGOs');
         const q = query(ngoRef, where('userId', '==', postData.createdBy));
@@ -36,14 +46,16 @@ const DonationPosts = () => {
     };
 
     const fetchPosts = async (isInitialLoad = false) => {
+        
         setLoading(true);
-
-        if (isInitialLoad) {
-            setNoMorePosts(false); 
-            setLastVisible(null);  
+        if(isInitialLoad){
+            setNoMorePosts(false);
+            setLastVisible(null);
         }
-
         let allPosts = [];
+        console.log(selectedCategories);
+        console.log(selectedStatus);
+        let totalPost=0;
 
         if (selectedCategories.length > 0) {
             // Fetch posts for each selected category
@@ -72,6 +84,17 @@ const DonationPosts = () => {
                 );
 
                 allPosts = [...allPosts, ...categoryPosts];
+                totalPost=allPosts.length;
+                if(selectedStatus.length===1){
+                    
+                    if(selectedStatus.includes('Completed')){
+                        
+                        allPosts=allPosts.filter((posts)=> posts.targetedAmount<=posts.reachedAmount);
+                    }else{
+                        
+                        allPosts=allPosts.filter((posts)=> posts.targetedAmount>posts.reachedAmount);
+                    }
+                }
             }
         } else {
             // Fetch all posts if no categories are selected
@@ -96,6 +119,16 @@ const DonationPosts = () => {
                     };
                 })
             );
+            totalPost=allPosts.length;
+            if(selectedStatus.length===1){
+                if(selectedStatus.includes('Completed')){
+                    
+                    allPosts=allPosts.filter((posts)=> posts.targetedAmount<=posts.reachedAmount);
+                }else{
+                    
+                    allPosts=allPosts.filter((posts)=> posts.targetedAmount>posts.reachedAmount);
+                }
+            }
 
             if (postsSnapshot.docs.length > 0) {
                 setLastVisible(postsSnapshot.docs[postsSnapshot.docs.length - 1]);
@@ -116,7 +149,7 @@ const DonationPosts = () => {
         }
 
         setLoading(false);
-        if (allPosts.length < 5) {
+        if (totalPost < 5) {
             setNoMorePosts(true);
         }
     };
@@ -124,7 +157,9 @@ const DonationPosts = () => {
     useEffect(() => {
         fetchPosts(true);
     }, [selectedCategories]);
-
+    useEffect(() => {
+        fetchPosts(true);
+    }, [selectedStatus]);
     // Dynamically sort posts when sort order changes
     useEffect(() => {
         const sortedPosts = [...posts];
@@ -173,7 +208,7 @@ const DonationPosts = () => {
                     className="category-button"
                     onClick={toggleSidePanel}
                 >
-                    Filter by Category
+                    Filter
                 </button>
 
                 {/* Side Panel */}
@@ -185,6 +220,7 @@ const DonationPosts = () => {
                         X
                     </button>
                     <div className="checkbox-container">
+                        <h3>By Category</h3>
                         {['Natural Disaster', 'Medical Treatment', 'Education', 'Social Welfare', 'Animal Rescue'].map((category) => (
                             <label key={category}>
                                 <input
@@ -194,6 +230,20 @@ const DonationPosts = () => {
                                     onChange={() => handleCategoryChange(category)}
                                 />
                                 {category}
+                            </label>
+                        ))}
+                    </div>
+                    <div className="checkbox-container mt-4">
+                        <h3>By Completion</h3>
+                        {['Completed','In Progress'].map((Status) => (
+                            <label key={Status}>
+                                <input
+                                    type="checkbox"
+                                    value={Status}
+                                    checked={selectedStatus.includes(Status)}
+                                    onChange={() => handleStatusChange(Status)}
+                                />
+                                {Status}
                             </label>
                         ))}
                     </div>
@@ -227,7 +277,7 @@ const DonationPosts = () => {
                         </p>
                         <meter
                             value={post.reachedAmount}
-                            min="0"
+                            min={post.targetedAmount === 0 ? -1 : 0}
                             max={post.targetedAmount}
                             low={post.targetedAmount / 2}
                             style={{ width: '100%', height: '35px' }}
