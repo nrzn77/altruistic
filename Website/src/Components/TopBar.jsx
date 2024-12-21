@@ -4,6 +4,7 @@ import { MdMenu, MdClose } from "react-icons/md";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase-config";
 import { signOut } from "firebase/auth";
+import ICONClearAID from "../assets/LOGOS/sweood.svg"
 import "./TopBar.css";
 
 export function TopBar({ userRole, setUserRole }) {
@@ -57,7 +58,7 @@ export function TopBar({ userRole, setUserRole }) {
     return (
         <nav style={menuOpen ? { backgroundColor: "var(--blue)" } : {}} onClick={() => { if (menuOpen) setMenuOpen(false) }}>
 
-            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src="./sweood.svg" className="main-logo" /><span>ClearAid</span></h1>
+            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src={ICONClearAID} className="main-logo" /><span>ClearAid</span></h1>
 
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 {!userRole && <>

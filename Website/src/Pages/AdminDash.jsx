@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {collection,getDocs,query,where,doc,updateDoc,} from "firebase/firestore";
-import { auth} from "../firebase-config";
+import { collection, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc } from "firebase/firestore";
+import { auth } from "../firebase-config";
 import { signOut } from "firebase/auth";
 
 import { db } from "../firebase-config";
@@ -13,7 +14,7 @@ const AdminDash = () => {
   const [ngos, setNgos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
+
   const fetchNgos = async () => {
     try {
       const ngoQuery = query(
@@ -48,13 +49,25 @@ const AdminDash = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        
-        navigate('/login'); 
+
+        navigate('/login');
       })
       .catch((error) => {
         console.error('Error logging out: ', error);
       });
   };
+
+  const handleReject = async (id) => {
+    try {
+      const ngoDoc = doc(db, "NGOs", id);
+      await deleteDoc(ngoDoc);
+      alert("NGO rejected and removed successfully!");
+      fetchNgos();
+    } catch (error) {
+      console.error("Error rejecting NGO:", error);
+      alert("Error rejecting NGO. Please try again.");
+    }
+  }; 
 
   useEffect(() => {
     fetchNgos();
@@ -111,7 +124,11 @@ const AdminDash = () => {
                       >
                         Approve
                       </button>
-                      <button className="reject-button">Reject</button>
+                      <button className="reject-button"
+                        onClick={() => handleReject(ngo.id)}
+                      >
+                        Reject
+                      </button>
                     </td>
                   </tr>
                 ))}
