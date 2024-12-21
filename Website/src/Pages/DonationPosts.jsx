@@ -4,7 +4,6 @@ import { db } from '../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import PostImage from '../Components/PostImage';
 import './Donation.css';
-import { is } from 'date-fns/locale';
 
 const DonationPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -16,8 +15,9 @@ const DonationPosts = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sidePanelVisible, setSidePanelVisible] = useState(false);
     const [sortOrder, setSortOrder] = useState('');
+    const [total, setTotal] = useState(0);
+    const [start, setStart] = useState(false);
     const navigate = useNavigate();
-
     const toggleSidePanel = () => {
         setSidePanelVisible(!sidePanelVisible);
     };
@@ -46,122 +46,90 @@ const DonationPosts = () => {
     };
 
     const fetchPosts = async (isInitialLoad = false) => {
+        console.log(start);
         
         setLoading(true);
-        if(isInitialLoad){
+    
+        if (isInitialLoad) {
             setNoMorePosts(false);
             setLastVisible(null);
+            setPosts([]);  
+            setTotal(0); 
         }
+    
         let allPosts = [];
-        console.log(selectedCategories);
-        console.log(selectedStatus);
-        let totalPost=0;
-
-        if (selectedCategories.length > 0) {
-            // Fetch posts for each selected category
-            for (const category of selectedCategories) {
-                let categoryQuery = query(
-                    collection(db, 'NGO_Posts'),
-                    where('cause', '==', category),
-                    orderBy('createdAt', 'desc'),
-                    ...(isInitialLoad
-                        ? [limit(5)]
-                        : [startAfter(lastVisible), limit(5)])
-                );
-
-                const categorySnapshot = await getDocs(categoryQuery);
-
-                const categoryPosts = await Promise.all(
-                    categorySnapshot.docs.map(async (docSnapshot) => {
-                        const postData = docSnapshot.data();
-                        const ngoData = await getNGOData(postData);
-                        return {
-                            ...postData,
-                            ngoName: ngoData ? ngoData.name : postData.ngoEmail,
-                            id: docSnapshot.id,
-                        };
-                    })
-                );
-
-                allPosts = [...allPosts, ...categoryPosts];
-                totalPost=allPosts.length;
-                if(selectedStatus.length===1){
-                    
-                    if(selectedStatus.includes('Completed')){
-                        
-                        allPosts=allPosts.filter((posts)=> posts.targetedAmount<=posts.reachedAmount);
-                    }else{
-                        
-                        allPosts=allPosts.filter((posts)=> posts.targetedAmount>posts.reachedAmount);
-                    }
-                }
-            }
-        } else {
-            // Fetch all posts if no categories are selected
-            let baseQuery = query(
-                collection(db, 'NGO_Posts'),
-                orderBy('createdAt', 'desc'),
-                ...(isInitialLoad
-                    ? [limit(5)]
-                    : [startAfter(lastVisible), limit(5)])
-            );
-
-            const postsSnapshot = await getDocs(baseQuery);
-
-            allPosts = await Promise.all(
-                postsSnapshot.docs.map(async (docSnapshot) => {
-                    const postData = docSnapshot.data();
-                    const ngoData = await getNGOData(postData);
-                    return {
-                        ...postData,
-                        ngoName: ngoData ? ngoData.name : postData.ngoEmail,
-                        id: docSnapshot.id,
-                    };
-                })
-            );
-            totalPost=allPosts.length;
-            if(selectedStatus.length===1){
-                if(selectedStatus.includes('Completed')){
-                    
-                    allPosts=allPosts.filter((posts)=> posts.targetedAmount<=posts.reachedAmount);
-                }else{
-                    
-                    allPosts=allPosts.filter((posts)=> posts.targetedAmount>posts.reachedAmount);
-                }
-            }
-
-            if (postsSnapshot.docs.length > 0) {
-                setLastVisible(postsSnapshot.docs[postsSnapshot.docs.length - 1]);
+        let baseQuery = query(
+            collection(db, 'NGO_Posts'),
+            orderBy('createdAt', 'desc'),
+            ...(isInitialLoad
+                ? [limit(5)]
+                : [startAfter(lastVisible), limit(5)])
+        );
+    
+        const postsSnapshot = await getDocs(baseQuery);
+    
+        allPosts = await Promise.all(
+            postsSnapshot.docs.map(async (docSnapshot) => {
+                const postData = docSnapshot.data();
+                const ngoData = await getNGOData(postData);
+                return {
+                    ...postData,
+                    ngoName: ngoData ? ngoData.name : postData.ngoEmail,
+                    id: docSnapshot.id,
+                };
+            })
+        );
+    
+        if (postsSnapshot.docs.length > 0) {
+            setLastVisible(postsSnapshot.docs[postsSnapshot.docs.length - 1]);
+        }
+    
+        if (selectedStatus.length === 1) {
+            if (selectedStatus.includes('Completed')) {
+                allPosts = allPosts.filter((post) => post.targetedAmount <= post.reachedAmount);
+            } else {
+                allPosts = allPosts.filter((post) => post.targetedAmount > post.reachedAmount);
             }
         }
-
+    
+        if (selectedCategories.length > 0 && selectedCategories.length < 5) {
+            const categorySet = new Set(selectedCategories);
+            allPosts = allPosts.filter((post) => categorySet.has(post.cause));
+        }
+    
         // Sort fetched posts based on the selected sort order
         if (sortOrder === 'High to Low') {
             allPosts.sort((a, b) => b.reachedAmount - a.reachedAmount);
         } else if (sortOrder === 'Low to High') {
             allPosts.sort((a, b) => a.reachedAmount - b.reachedAmount);
         }
-
+    
         if (isInitialLoad) {
             setPosts(allPosts);
+            setTotal(allPosts.length); 
         } else {
             setPosts((prevPosts) => [...prevPosts, ...allPosts]);
+            setTotal((prevTotal) => prevTotal + allPosts.length); 
         }
-
+    
         setLoading(false);
-        if (totalPost < 5) {
+        setStart(true);
+    
+        if (postsSnapshot.docs.length === 0) {
             setNoMorePosts(true);
         }
     };
 
     useEffect(() => {
+        console.log(1);
+        
         fetchPosts(true);
-    }, [selectedCategories]);
-    useEffect(() => {
-        fetchPosts(true);
-    }, [selectedStatus]);
+        
+    }, [selectedCategories,selectedStatus]);
+    
     // Dynamically sort posts when sort order changes
     useEffect(() => {
+        console.log(2);
         const sortedPosts = [...posts];
         if (sortOrder === 'High to Low') {
             sortedPosts.sort((a, b) => b.reachedAmount - a.reachedAmount);
@@ -187,16 +155,23 @@ const DonationPosts = () => {
     };
 
     useEffect(() => {
+        console.log(3);
         const handleScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-            if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && !noMorePosts) {
+            if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && !noMorePosts && start) {
                 fetchPosts();
             }
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [loading, noMorePosts]);
+    }, [loading, noMorePosts, start]);
+    useEffect(() => {
+        console.log(4);
+        if (start && total < 5 && !loading && !noMorePosts) {
+            fetchPosts(); 
+        }
+    }, [start, total, loading, noMorePosts]);
 
     return (
         <div className="donations-page">

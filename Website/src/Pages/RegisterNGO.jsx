@@ -133,7 +133,7 @@ const RegisterNGO = ({ setUserRole }) => {
       return;
     }
 
-    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
 
     if (!passwordRegex.test(formData.password)) {
       alert("Password does not meet criteria: at least 8 characters, includes one lowercase letter, one uppercase letter, one digit, one special character, and no consecutive identical digits.");
@@ -218,7 +218,7 @@ const RegisterNGO = ({ setUserRole }) => {
   };
 
   const isPasswordValid =
-      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password);
+      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(formData.password);
 
 
   const isPasswordMatching =
@@ -514,10 +514,7 @@ const RegisterNGO = ({ setUserRole }) => {
             )}
           </Form.Group>
         </Row>
-        <Row className='text-center mb-2'
-        style={{color: 'grey'}}>
-          *Password must contain atleast 8 characters including one uppercase letter, one lowercase letter, one special character, one number and no consecutive same number
-        </Row>
+        <div className='text-center mb-2' style={{color:'grey',fontSize:'16px'}}>*Password must contain atleast 8 characters including one uppercase letter, one lowercase letter, one special character, one number and no consecutive same number</div>
 
         <Button
           variant="primary"

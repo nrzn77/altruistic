@@ -27,7 +27,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
       return;
     }
 
-    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
 
     if (!passwordRegex.test(password)) {
       alert("Password does not meet criteria: at least 8 characters, includes one lowercase letter, one uppercase letter, one digit, one special character, and no consecutive identical digits.");
@@ -83,7 +83,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
     }
   };
   const isPasswordValid =
-      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(password);
   return (
     <div className="container mt-3">
       <h1 className="text-center mb-4" style={{color: '#211940'}}>Volunteer Registration</h1>
