@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import React, { useState, useEffect } from 'react';
-import DonateButton from "../Components/DonateButton";
+import PostCard from "../Components/PostCard";
 
 
 
@@ -67,23 +67,18 @@ const SearchEngine = () => {
   
     return (
       <div>
-        <h1>Search NGO Posts</h1>
+        <h1 style={{textAlign:"center"}}>Searched NGO Posts: {searchTerm}</h1>
   
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div>
             {searchResults.length > 0 ? (
-              <ul>
-                {searchResults.map(post => (
-                  <li key={post.id}>
-                    <h2>{post.title}</h2>
-                    <p>{post.description}</p>
-                    <p>{post.reachedAmount}/{post.targetedAmount}</p>
-                    <DonateButton post={post} />
-                  </li>
+              <div className="posts-container">
+                {searchResults.map((post, index) => (
+                  <PostCard post={post} key={index} />
                 ))}
-              </ul>
+              </div>
             ) : (
               <p>No results found.</p>
             )}

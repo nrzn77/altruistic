@@ -27,8 +27,10 @@ const RegisterVolunteer = ({ setUserRole }) => {
       return;
     }
 
-    if (password.length < 6) {
-      alert('Password must be at least 6 characters long.');
+    const passwordRegex = /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      alert("Password does not meet criteria: at least 8 characters, includes one lowercase letter, one uppercase letter, one digit, one special character, and no consecutive identical digits.");
       return;
     }
 
@@ -80,19 +82,20 @@ const RegisterVolunteer = ({ setUserRole }) => {
       setLoading(false);
     }
   };
-
+  const isPasswordValid =
+      /^(?!.*(\d)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(password);
   return (
     <div className="container mt-3">
-      <h1 className="text-center mb-4">Volunteer Registration</h1>
+      <h1 className="text-center mb-4" style={{color: '#211940'}}>Volunteer Registration</h1>
       <div className="row justify-content-center">
-        <div className="col-md-7">
-          <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm">
+        <div className="col-md-7" style={{ marginBottom: '50px' }}>
+          <form onSubmit={handleRegister} className="border p-4 rounded shadow-sm" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '15px' }}>
             <div className="form-group mb-2">
               <label>Email:</label>
               <input
                 type="email"
                 className="form-control"
-                placeholder="Email"
+                // placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -119,21 +122,21 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Password"
+                  // placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   style={{
                     borderColor: !password
                       ? '#ced4da'
-                      : password.length >= 6
+                      : isPasswordValid
                       ? 'green'
                       : 'red',
                   }}
                 />
-                {password && password.length < 6 && (
+                {password && !isPasswordValid && (
                   <small style={{ color: 'red', fontSize: '12px' }}>
-                    Password must be at least 6 characters long.
+                    Invalid Password
                   </small>
                 )}
               </div>
@@ -143,7 +146,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Confirm Password"
+                  // placeholder="Confirm Password"
                   value={confirmPassword}
                   disabled={!password}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -162,15 +165,16 @@ const RegisterVolunteer = ({ setUserRole }) => {
                   </small>
                 )}
               </div>
+            
             </div>
-
+            <div className='text-center' style={{color:'grey',fontSize:'14px'}}>*Password must contain atleast 8 characters including one uppercase letter, one lowercase letter, one special character, one number and no consecutive same number</div>
 
             <div className="form-group mb-3">
-              {/* <label>Name:</label> */}
+              <label>Name:</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Name"
+                // placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -193,11 +197,11 @@ const RegisterVolunteer = ({ setUserRole }) => {
             </div>
 
             <div className="form-group mb-3">
-              {/* <label>Skills:</label> */}
+              <label>Skills:</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Skills"
+                // placeholder="Skills"
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
                 required
@@ -220,7 +224,7 @@ const RegisterVolunteer = ({ setUserRole }) => {
             </div>
 
             <div className="form-group mb-3">
-              {/* <label>Photo:</label> */}
+              <label>Photo:</label>
               <input
                 type="file"
                 className="form-control"

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import {collection,getDocs,query,where,doc,updateDoc,} from "firebase/firestore";
+import { auth} from "../firebase-config";
+import { signOut } from "firebase/auth";
+
 import { db } from "../firebase-config";
+
 import "./AdminDash.css";
 
 const AdminDash = () => {
@@ -16,10 +13,7 @@ const AdminDash = () => {
   const [ngos, setNgos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    navigate("/admin");
-  };
-
+  
   const fetchNgos = async () => {
     try {
       const ngoQuery = query(
@@ -51,6 +45,17 @@ const AdminDash = () => {
     }
   };
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        
+        navigate('/login'); 
+      })
+      .catch((error) => {
+        console.error('Error logging out: ', error);
+      });
+  };
+
   useEffect(() => {
     fetchNgos();
   }, []);
@@ -65,55 +70,59 @@ const AdminDash = () => {
         {loading ? (
           <p>Loading NGOs...</p>
         ) : ngos.length > 0 ? (
-          <table className="ngo-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>About Us</th>
-                <th>License No</th>
-                <th>Contact Email</th>
-                <th>Phone</th>
-                <th>Cash Payment Info</th>
-                <th>Mobile Payment Info</th>
-                <th>Wire Transfer (Account No)</th>
-                <th>Wire Transfer (Branch)</th>
-                <th>Wire Transfer (Bank)</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ngos.map((ngo, index) => (
-                <tr key={ngo.id}>
-                  <td>{index + 1}</td>
-                  <td>{ngo.name}</td>
-                  <td>{ngo.aboutUs}</td>
-                  <td>{ngo.licenseNo}</td>
-                  <td>{ngo.contactInfo?.email}</td>
-                  <td>{ngo.contactInfo?.phone}</td>
-                  <td>{ngo.paymentInfo?.cash}</td>
-                  <td>{ngo.paymentInfo?.mobilePayment}</td>
-                  <td>{ngo.paymentInfo?.wireTransfer?.accountNumber}</td>
-                  <td>{ngo.paymentInfo?.wireTransfer?.branchName}</td>
-                  <td>{ngo.paymentInfo?.wireTransfer?.bankName}</td>
-                  <td>
-                    <button
-                      className="approve-button"
-                      onClick={() => handleApprove(ngo.id)}
-                    >
-                      Approve
-                    </button>
-                    <button className="reject-button">Reject</button>
-                  </td>
+          <div className="table-container">
+            <table className="ngo-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>About Us</th>
+                  <th>License No</th>
+                  <th>License Image</th>
+                  <th>Contact Email</th>
+                  <th>Phone</th>
+                  <th>Cash Payment Info</th>
+                  <th>Mobile Payment Info</th>
+                  <th>Wire Transfer (Account No)</th>
+                  <th>Wire Transfer (Branch)</th>
+                  <th>Wire Transfer (Bank)</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {ngos.map((ngo, index) => (
+                  <tr key={ngo.id}>
+                    <td>{index + 1}</td>
+                    <td>{ngo.name}</td>
+                    <td>{ngo.aboutUs}</td>
+                    <td>{ngo.licenseNo}</td>
+                    <td><a href={ngo.photoURL} target="_blank">View License</a></td>
+                    <td>{ngo.contactInfo?.email}</td>
+                    <td>{ngo.contactInfo?.phone}</td>
+                    <td>{ngo.paymentInfo?.cash}</td>
+                    <td>{ngo.paymentInfo?.mobilePayment}</td>
+                    <td>{ngo.paymentInfo?.wireTransfer?.accountNumber}</td>
+                    <td>{ngo.paymentInfo?.wireTransfer?.branchName}</td>
+                    <td>{ngo.paymentInfo?.wireTransfer?.bankName}</td>
+                    <td>
+                      <button
+                        className="approve-button"
+                        onClick={() => handleApprove(ngo.id)}
+                      >
+                        Approve
+                      </button>
+                      <button className="reject-button">Reject</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p>No NGOs found.</p>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

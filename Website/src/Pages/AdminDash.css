@@ -26,6 +26,10 @@
   padding: 10px;
 }
 
+.table-container{
+  overflow-x: auto;
+}
+
 .ngo-table {
   width: 95%;
   max-width: 1200px;
@@ -41,7 +45,7 @@
 .ngo-table td {
   padding: 8px 12px;
   border: 1px solid #ddd;
-  word-break: break-word;
+  /* word-break: break-word; */
 }
 
 .ngo-table th:first-child,

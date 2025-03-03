@@ -1,21 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Button } from 'react-bootstrap';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import VolunteerOverview from '../Components/Volunteer/VolunteerOverview';
 import VolunteerProfile from '../Components/Volunteer/VolunteerProfile';
-import MyProjects from '../Components/Volunteer/EnrolledProjectsVolunteer';
-import AvailableProjects from '../Components/Volunteer/AvailableProjectsVolunteer';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
 import { db } from '../firebase-config';
-// import { setRole } from '../Components/role';
 
 const Volunteer_Dashboard = ({ setUserRole }) => {
   const [activeTab, setActiveTab] = useState('overview'); // Default to 'overview'
-  const [isEnrolled, setIsEnrolled] = useState(false); // Track enrollment status
   const [volunteerData, setVolunteerData] = useState({
     photoURL: "./images/profile.png",
     name: "name",
@@ -23,16 +18,14 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
     availability: "available"
   });
 
-
-
   const getNavLinkStyle = (tab) => ({
-    backgroundColor: activeTab === tab ? 'var(--blue)' : 'transparent',
-    color: activeTab === tab ? 'white' : 'black',
-    padding: '10px',
-    marginBottom: '5px',
-    borderRadius: '5px',
+    backgroundColor: activeTab === tab ? 'white' : 'transparent',
+    color: 'black',
+    borderTopLeftRadius: '10px', 
+    borderTopRightRadius: '10px',
     cursor: 'pointer',
     textAlign: 'center',
+    width: '150px',
   });
 
   // Logout function
@@ -55,26 +48,24 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
     }
   };
 
-
   useEffect(() => {
     async function getData() {
       const a = await fetchVolunteerByUID(auth.currentUser.uid);
       if (!a) {
-        console.log(a)
+        console.log(a);
         handleLogout();
-      }
-      else {
+      } else {
         setVolunteerData(a);
       }
       return a;
     }
-    getData()
-  }, [])
+    getData();
+  }, []);
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setUserRole(null)
+        setUserRole(null);
         navigate('/loginV'); // Redirect to login page after logout
       })
       .catch((error) => {
@@ -91,12 +82,13 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
       setVolunteerData(prev => ({
         ...prev,
         availability: newAvailability
-      }))
-      console.log(`Availability updated to: ${newAvailability}`);
+      }));
+      console.log('Availability updated to: ${newAvailability}');
     } catch (error) {
       console.error('Error updating availability:', error);
     }
   };
+
   const updateProfile = async (uid, name, area, skills) => {
     try {
       const volunteerRef = doc(db, 'volunteers', uid);
@@ -106,8 +98,8 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
       setVolunteerData(prev => ({
         ...prev,
         name, area, skills
-      }))
-      alert(`Profile updated.`);
+      }));
+      alert('Profile updated.');
     } catch (error) {
       console.error('Error updating profile:', error);
       alert('Error updating profile');
@@ -116,96 +108,141 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
 
   return (
     <div>
-      <h1>Volunteer Dashboard</h1>
-      <Container fluid>
-        <Row>
-          {/* Side Panel */}
-          <Col md={3} className="bg-light p-3">
-            <h4>Dashboard</h4>
-            <Nav defaultActiveKey="overview" className="flex-column">
-              <Nav.Link
-                eventKey="overview"
-                onClick={() => setActiveTab('overview')}
-                style={getNavLinkStyle('overview')}
-              >
-                Overview
-              </Nav.Link>
-              <Nav.Link
-                eventKey="profile"
-                onClick={() => setActiveTab('profile')}
-                style={getNavLinkStyle('profile')}
-              >
-                Profile
-              </Nav.Link>
-              {/* <Nav.Link
-                eventKey="enrolled-projects"
-                onClick={() => setActiveTab('enrolled-projects')}
-                style={getNavLinkStyle('enrolled-projects')}
-              >
-                Enrolled Projects
-              </Nav.Link> */}
-              {/* <Nav.Link
-                eventKey="availability"
-                onClick={() => setActiveTab('availability')}
-                style={getNavLinkStyle('availability')}
-              >
-                Available
-                {/* Availability Status Indicator }
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '10px',
-                    height: '10px',
-                    borderRadius: '50%',
-                    marginLeft: '8px',
-                    backgroundColor: isEnrolled ? 'red' : 'green',
-                  }}
-                />
-              </Nav.Link> */}
-            </Nav>
-
-            {/* Logout Button */}
-            <Button
-              onClick={() => {
-                if (volunteerData.availability == "available")
-                  updateAvailability(auth.currentUser.uid, "not available")
-                else
-                  updateAvailability(auth.currentUser.uid, "available")
+      <h1 className='text-center mt-2 mb-2'>Volunteer Dashboard</h1>
+      <Container>
+            <Row className='mb-4'>
+            {/* Toggle Availability Button */}
+            <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+             <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <div
+                onClick={() => {
+                const newAvailability = volunteerData.availability === 'available' ? 'not available' : 'available';
+                updateAvailability(auth.currentUser.uid, newAvailability);
               }}
               style={{
-                backgroundColor: volunteerData.availability == "available" ? "green" : "red",
-                color: 'white',
-                width: '100%',
-                marginTop: '10px',
-                padding: '10px',
-                borderRadius: '5px',
-              }}
-            >{volunteerData.availability}</Button>
-            <Button
-              onClick={handleLogout}
-              style={{
-                backgroundColor: 'red',
-                color: 'white',
-                width: '100%',
-                marginTop: '10px',
-                padding: '10px',
-                borderRadius: '5px',
+                width: '150px',
+                height: '50px',
+                borderRadius: '50px',
+                backgroundColor: volunteerData.availability === 'available' ? 'green' : 'grey',
+                display: 'flex',
+                justifyContent: volunteerData.availability === 'available' ? 'flex-end' : 'flex-start',
+                padding: '5px',
+                transition: 'all 0.3s ease',
+                marginRight: '10px',
+                position: 'relative',
               }}
             >
-              Logout
-            </Button>
-          </Col>
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              backgroundColor: 'white',
+              position: 'absolute',
+              top: '5px',
+              left: '5px',
+              transition: 'transform 0.1s ease',
+              transform: volunteerData.availability === 'available' ? 'translateX(100px)' : 'translateX(0)',
+            }}
+          />
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: volunteerData.availability === 'available' ? '20%' : '35%', // Adjust based on state
+            transform: 'translateY(-50%)', // Vertically center the text
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            transition: 'left 0.1s ease', // Smooth transition
+          }}
+        >
+          {volunteerData.availability === 'available' ? 'Available' : 'Not Available'}
+          </div>
+      </div>
+    </label>
+  </div>
+  </Row>
+
+          {/* Side Panel */}
+          <div style={{backgroundColor:'transparent',padding:'12px 25px',borderRadius:'20px'}}>
+          <Row  style={{borderRadius:'20px' ,margin: '0% 0%'}}>
+          <Nav
+  defaultActiveKey="overview"
+  className="flex-row"
+  style={{
+    display: 'flex',
+    justifyContent: 'space-around', // Center horizontally
+    alignItems: 'center', // Optional: Center items vertically
+    width: '100%', 
+  }}
+>
+  <Nav.Link
+    eventKey="overview"
+    onClick={() => setActiveTab('overview')}
+    style={getNavLinkStyle('overview')}
+  >
+    Overview
+  </Nav.Link>
+  <Nav.Link
+    eventKey="profile"
+    onClick={() => setActiveTab('profile')}
+    style={getNavLinkStyle('profile')}
+  >
+    Profile
+  </Nav.Link>
+</Nav>
+</Row>
+
+            
+
+
+
+            
+          
 
           {/* Main Content Area */}
-          <Col md={9}>
+          <Row style={{}}>
             {activeTab === 'overview' && <VolunteerOverview volunteerData={volunteerData} />}
             {activeTab === 'profile' && <VolunteerProfile volunteerData={volunteerData} updateProfile={updateProfile} />}
-            {/* {activeTab === 'enrolled-projects' && <MyProjects setIsEnrolled={setIsEnrolled} />} */}
-            {/* {activeTab === 'availability' && <AvailableProjects />} */}
-          </Col>
-        </Row>
+          </Row>
+          </div>
+        
       </Container>
-    </div>
+      <div
+  style={{
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <Button
+    onClick={handleLogout}
+    style={{
+      backgroundColor: 'red',
+      color: 'white',
+      fontSize: '20px',
+      fontWeight: 'bold',
+      margin: '20px',
+      padding: '5px 0px',
+      borderRadius: '10px',
+      width: '30%',
+      border: 'none',
+      transition: 'all 0.2s ease', // Smooth transition for hover and active states
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.backgroundColor = '#b22122'; // Darker red on hover
+      e.target.style.transform = 'scale(1.02)'; // Slightly enlarge the button
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.backgroundColor = 'red'; // Reset to original red color
+      e.target.style.transform = 'scale(1)'; // Reset to original size
+    }}
+  >
+    Logout
+  </Button>
+</div>
+</div>
+    
   );
 };
 
