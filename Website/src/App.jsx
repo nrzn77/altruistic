@@ -115,7 +115,7 @@ function Layout({ user, userRole, setUserRole }) {
           />
 
           {/* Volunteer Login */}
-          <Route
+          {/* <Route
             path="/loginV"
             element={
               !user ? (
@@ -124,7 +124,7 @@ function Layout({ user, userRole, setUserRole }) {
                 <Customnavigate to="/dashboardVolun" />
               )
             }
-          />
+          /> */}
 
           <Route
             path="/register"
@@ -164,7 +164,7 @@ function Layout({ user, userRole, setUserRole }) {
               user ? (
                 <DashboardVolun setUserRole={setUserRole} />
               ) : (
-                <Customnavigate to="/loginV" />
+                <Customnavigate to="/login" />
               )
             }
           />

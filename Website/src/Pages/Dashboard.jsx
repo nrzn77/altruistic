@@ -60,7 +60,8 @@ const Dashboard = ({ setUserRole }) => {
     async function getData() {
       const a = await fetchNGOByUID(auth.currentUser.uid);
       if (!a) {
-        handleLogout();
+        setUserRole("volunteer")
+        navigate('/dashboardVolun', { replace: true })
       } else {
         setNGOData(a);
         fetchNgoPosts(auth.currentUser.uid);

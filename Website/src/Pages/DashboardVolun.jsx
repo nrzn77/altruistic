@@ -62,7 +62,7 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
     signOut(auth)
       .then(() => {
         setUserRole(null);
-        navigate('/loginV'); // Redirect to login page after logout
+        navigate('/login'); // Redirect to login page after logout
       })
       .catch((error) => {
         console.error("Error logging out: ", error);

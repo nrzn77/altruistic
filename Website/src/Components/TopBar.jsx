@@ -62,11 +62,11 @@ export function TopBar({ userRole, setUserRole }) {
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 {!userRole && <>
                     <Link to="/login">
-                        Login as NGO
+                        Login
                     </Link>
-                    <Link to="/loginV">
+                    {/* <Link to="/loginV">
                         Login as Volunteer
-                    </Link>
+                    </Link> */}
                     <Link to="/register">
                         Become a Volunteer
                     </Link>

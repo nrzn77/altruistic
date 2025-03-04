@@ -483,7 +483,7 @@ meter {
   width: 10%;
   height: 2%;
   background: linear-gradient(to right, #292929, #1d1d1d, #292929);
-  animation: ping-pong 5s linear infinite;
+  animation: ping-pong 2s cubic-bezier(0, .85, 1, .15) infinite;
 }
 
 @keyframes ping-pong {
