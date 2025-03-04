@@ -9,6 +9,7 @@ import { Card, Button, ListGroup, Row, Col } from 'react-bootstrap';
 import { MdDelete, MdEmail } from 'react-icons/md';
 import { FaPhoneAlt } from "react-icons/fa";
 import PostImage from '../Components/PostImage';
+import Loader from '../Components/Loader';
 
 const Dashboard = ({ setUserRole }) => {
   const navigate = useNavigate();
@@ -92,6 +93,9 @@ const Dashboard = ({ setUserRole }) => {
     }
   };
   
+  if(!NGOData)
+    return <Loader />
+
 
   return (
     <div className='ngo-dashboard text-center' style={{padding:'0px 10%'}}>

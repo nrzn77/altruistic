@@ -8,15 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase-config';
 import { signOut } from 'firebase/auth';
 import { db } from '../firebase-config';
+import Loader from '../Components/Loader';
 
 const Volunteer_Dashboard = ({ setUserRole }) => {
   const [activeTab, setActiveTab] = useState('overview'); // Default to 'overview'
-  const [volunteerData, setVolunteerData] = useState({
-    photoURL: "./images/profile.png",
-    name: "name",
-    skills: "skills",
-    availability: "available"
-  });
+  const [volunteerData, setVolunteerData] = useState(null);
 
   const getNavLinkStyle = (tab) => ({
     backgroundColor: activeTab === tab ? 'white' : 'transparent',
@@ -105,6 +101,9 @@ const Volunteer_Dashboard = ({ setUserRole }) => {
       alert('Error updating profile');
     }
   };
+
+  if(!volunteerData)
+    return <Loader />
 
   return (
     <div>
