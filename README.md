@@ -60,6 +60,10 @@ REACT_APP_FIREBASE_APP_ID=your-app-id
 ```bash
 npm run dev
 ```
+6. Start the Image Server
+```bash
+npm run devStart
+```
 
 
 ## Usage
