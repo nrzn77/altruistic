@@ -5,6 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase-config";
 import { signOut } from "firebase/auth";
 import "./TopBar.css";
+import LOGO from "../assets/LOGOS/sweood.svg"
 
 export function TopBar({ userRole, setUserRole }) {
     // const location = useLocation();
@@ -57,7 +58,7 @@ export function TopBar({ userRole, setUserRole }) {
     return (
         <nav style={menuOpen ? { backgroundColor: "var(--blue)" } : {}} onClick={() => { if (menuOpen) setMenuOpen(false) }}>
 
-            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src="./sweood.svg" className="main-logo" /><span>ClearAid</span></h1>
+            <h1 className={searchOpen ? ' searchmode' : ''} onClick={() => { navigate("/") }}><img src={LOGO} className="main-logo" /><span>ClearAid</span></h1>
 
             <div className={(menuOpen ? 'menu menu-show' : 'menu') + (searchOpen ? ' searchmode' : '')}>
                 {!userRole && <>
