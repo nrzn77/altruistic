@@ -66,7 +66,7 @@ const SearchEngine = () => {
     }, [searchTerm])
   
     return (
-      <div>
+      <div className="search-page">
         <h1 style={{textAlign:"center"}}>Searched NGO Posts: {searchTerm}</h1>
   
         {loading ? (

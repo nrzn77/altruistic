@@ -2,7 +2,7 @@ body {
     background: linear-gradient(to right, #a8aaff, #dbb2f3, #a8aaff);
 }
 
-.donations-page {
+.donations-page, .search-page {
     font-family: 'Nunito', sans-serif;
     padding: 20px;
     background: transparent;

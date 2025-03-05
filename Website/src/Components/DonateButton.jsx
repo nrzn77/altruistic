@@ -25,7 +25,7 @@ export default function DonateButton({ post }) {
         >
             Donate Now!
         </button>}
-        {post.reachedAmount >= post.targetedAmount && <>Thanks to all our donnors, we have reached our target!</>}
+        {post.reachedAmount >= post.targetedAmount && <p>Thanks to all our donors, we have reached our target!</p>}
     </>
     )
 }
