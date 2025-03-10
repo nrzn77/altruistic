@@ -65,6 +65,9 @@ npm run dev
 npm run devStart
 ```
 
+## Youtube Link to 0ur Project Demo
+
+[This is an external link to Youtube of our Project Demonstration video](https://youtu.be/CZpSJvk2IbM?si=MtA27IrvKytxbngH)
 
 ## Usage
 
